@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const checkAuthentication = require("../middlewares/checkAuthentication");
+const CheckAuthentication = require("../middlewares/CheckAuthentication");
 const CategoryController = require("../controllers/CategoryController");
 
 // Create a new router for category routes
@@ -13,6 +13,6 @@ categoryRouter.put('/:id', CategoryController.update);
 categoryRouter.delete('/:id', CategoryController.destroy);
 
 // Use the category router for routes under /category
-router.use('/category', checkAuthentication, categoryRouter);
+router.use('/category', CheckAuthentication, categoryRouter);
 
 module.exports = router;
