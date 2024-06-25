@@ -5,23 +5,22 @@ const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        required: [true, 'Name is required']
+        required: true
     },
     email: {
         type: String,
         required: [true, 'Email is required'],
         unique: true,
-        validate: [validator.isEmail, 'Please enter a valid email']
     },
     type: {
         type: String,
-        enum: ['super', 'admin', 'agent'],
-        default: 'agent'
+        enum: ['supers', 'admins', 'agents', 'users'],
+        default: 'users'
     },
     password: {
         type: String,
         required: [true, 'Password is required'],
-        minlength: [6, 'Password must be at least 6 characters long']
+        minlength: 6
     }
 }, { timestamps: true });
 
@@ -62,19 +61,14 @@ UserSchema.statics.register = async function(name, email, password) {
 
 UserSchema.statics.login = async function(email, password) {
  try{
-     if(!email || !password) {
-         throw new Error('All fields are required');
-     }
+     if(!email || !password) throw new Error('All fields are required');
 
      const user = await this.findOne({email});
-     if(!user){
-         throw new Error('User does not exist');
-     }
+     if(!user) throw new Error('User does not exist');
 
      const match = await bcrypt.compare(password, user.password);
-     if(!match){
-         throw new Error('User does not exist');
-     }
+
+     if(!match) throw new Error('User does not exist');
 
      return user;
  }catch(e){
