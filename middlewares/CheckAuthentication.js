@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
-const checkAuthentication = async (req, res, next) => {
+const CheckAuthentication = async (req, res, next) => {
     try {
         // verify token
         const token= req.cookies.token;
@@ -15,9 +15,7 @@ const checkAuthentication = async (req, res, next) => {
             return res.status(401).json("Invalid token");
         }
 
-        const user = await User.findById(matches._id);
-
-        req.user = user;
+        req.user = await User.findById(matches._id);
 
         next();
     } catch (e) {
@@ -25,4 +23,4 @@ const checkAuthentication = async (req, res, next) => {
     }
 }
 
-module.exports = checkAuthentication;
+module.exports = CheckAuthentication;
