@@ -41,10 +41,11 @@ const update = async (req,res) => {
         const { id } = req.params;
         const findId = await Service.getOne(Blog,id);
         if(!findId) return res.status(404).json({error: 'Post not found'});
+        
 
         const {title, content, image} = req.body;
         if(!title || !content || !image) {
-            return es.status(404).json({error: 'there is nothing'});
+            return res.status(404).json(findId);
         }
 
         const updatedBlog = await Service.update(Blog, id, req.body);
