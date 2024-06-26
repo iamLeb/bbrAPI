@@ -36,25 +36,21 @@ const getOne = async (req,res) => {
     }
 }
 
-const update = async (req,res) => {
-    try{
+const update = async (req, res) => {
+    try {
         const { id } = req.params;
-        const findId = await Service.getOne(Blog,id);
-        if(!findId) return res.status(404).json({error: 'Post not found'});
+
+        const findId = await Service.getOne(Blog, id);
+        if(!findId) return res.status(404).json({error: 'comment not found'}); 
+
+        const {title, image, content} = req.body;
+
+        const update = await Service.update(Blog, id, req.body);
+        if (!update) return res.status(400).json({error:'There was an error updating the blog'});
         
 
-        const {title, content, image} = req.body;
-        if (!title){
-            findId.cont
-        }
-
-        return res.status(404).json(req.body);
-
-        const updatedBlog = await Service.update(Blog, id, req.body);
-        if (!updatedBlog) return res.status(400).json({error: 'There was an error updating the comment'});
-
-        return res.status(200).json(updatedBlog);
-    } catch (e){
+        return res.status(200).json(update);
+    } catch (e) {
         return res.status(500).json({error: e.message});
     }
 }
