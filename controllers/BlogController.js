@@ -44,9 +44,14 @@ const update = async (req,res) => {
         
 
         const {title, content, image} = req.body;
-        if(!title || !content || !image) {
-            return res.status(404).json(findId);
-        }
+        if(!title || !content)
+            findId.image = image;
+        if(!title || !image) 
+            findId.content = content;
+        if(!image || !content)
+            findId.title = title;
+            
+        // return res.status(404).json(findId);
 
         const updatedBlog = await Service.update(Blog, id, req.body);
 
