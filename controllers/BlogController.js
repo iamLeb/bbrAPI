@@ -7,7 +7,7 @@ const create = async (req, res) => {
         if (!title) return res.status(400).json({error: 'Blog title is required'});
 
         const blog = await Service.create(Blog, req.body);
-        if (!blog) return res.status(400).json({error: 'There was an error creating the category'});
+        if (!blog) return res.status(400).json({error: 'There was an error creating the Blog'});
 
         return res.status(200).json(blog);
     } catch (e) {
@@ -28,7 +28,7 @@ const getOne = async (req,res) => {
     try{
         const { id } = req.params;
         const blog = await Service.getOne(Blog, id);
-        if (!blog) return res.status(404).send({error: 'Category not found'});
+        if (!blog) return res.status(404).send({error: 'Post not found'});
 
         return res.status(200).json(blog);
     } catch (e){
@@ -43,6 +43,9 @@ const update = async (req,res) => {
         if(!findId) return res.status(404).json({error: 'Post not found'});
 
         const {title, content, image} = req.body;
+        if(!title || !content || !image) {
+            return es.status(404).json({error: 'there is nothing'});
+        }
 
         const updatedBlog = await Service.update(Blog, id, req.body);
 
