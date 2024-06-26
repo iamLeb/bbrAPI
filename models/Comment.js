@@ -1,4 +1,5 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const {Schema} = require("mongoose");
 
 const CommentSchema = new mongoose.Schema({
     name: {
@@ -8,7 +9,7 @@ const CommentSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    blogId :{
+    blogId: {
         type: Schema.Types.ObjectId,
         ref: 'Blog',
         required: true
