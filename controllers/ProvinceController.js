@@ -59,26 +59,26 @@ const update = async (req, res) => {
     } catch (e) {
         return res.status(500).json({error: e.message});
     }
+}
 
-    const destroy = async (req, res) => {
-        try {
-            const {id} = req.params;
+const destroy = async (req, res) => {
+    try {
+        const {id} = req.params;
 
-            const findId = await Service.getOne(Province, id);
-            if (!findId) return res.status(404).json({error: 'Province not found'});
+        const findId = await Service.getOne(Province, id);
+        if (!findId) return res.status(404).json({error: 'Province not found'});
 
-            await Service.destroy(Province, id);
-            return res.status(200).json({message: 'Province destroyed'});
-        } catch (e) {
-            return res.status(500).json({error: e.message});
-        }
+        await Service.destroy(Province, id);
+        return res.status(200).json({message: 'Province destroyed'});
+    } catch (e) {
+        return res.status(500).json({error: e.message});
     }
+}
 
-    module.exports = {
-        create,
-        getAll,
-        getOne,
-        update,
-        destroy
-    }
+module.exports = {
+    create,
+    getAll,
+    getOne,
+    update,
+    destroy
 }

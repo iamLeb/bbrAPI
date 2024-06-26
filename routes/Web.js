@@ -95,10 +95,10 @@ provinceRouter.put('/:id', ProvinceController.update);
 provinceRouter.delete('/:id', ProvinceController.destroy);
 
 // Use the category router for routes under /category
-router.use('/category', CheckAuthentication, categoryRouter);
+router.use('/province', CheckAuthentication, provinceRouter);
 
 /**
- * Category Routes Ends
+ * Province Routes Ends
  */
 
 module.exports = router;
