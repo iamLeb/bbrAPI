@@ -5,6 +5,7 @@ const CategoryController = require("../controllers/CategoryController");
 const ContactController = require("../controllers/ContactController");
 const GalleryController = require("../controllers/GalleryController");
 const TestimonialController = require("../controllers/TestimonialController");
+const ProvinceController = require("../controllers/ProvinceController");
 
 /**
  * Category Routes
@@ -81,5 +82,23 @@ router.use('/testimonial', CheckAuthentication, testimonial);
  * Testimonial Routes Ends
  */
 
+/**
+ * Province Routes
+ */
+// Create a new router for province routes
+const provinceRouter = express.Router();
+
+provinceRouter.post('/create', ProvinceController.create);
+provinceRouter.get('/', ProvinceController.getAll);
+provinceRouter.get('/:id', ProvinceController.getOne);
+provinceRouter.put('/:id', ProvinceController.update);
+provinceRouter.delete('/:id', ProvinceController.destroy);
+
+// Use the category router for routes under /category
+router.use('/category', CheckAuthentication, categoryRouter);
+
+/**
+ * Category Routes Ends
+ */
 
 module.exports = router;
