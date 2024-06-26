@@ -44,16 +44,14 @@ const update = async (req,res) => {
         
 
         const {title, content, image} = req.body;
-        if(!title || !content)
-            findId.image = image;
-        if(!title || !image) 
-            findId.content = content;
-        if(!image || !content)
-            findId.title = title;
-            
-        // return res.status(404).json(findId);
+        if (!title){
+            findId.cont
+        }
+
+        return res.status(404).json(req.body);
 
         const updatedBlog = await Service.update(Blog, id, req.body);
+        if (!updatedBlog) return res.status(400).json({error: 'There was an error updating the comment'});
 
         return res.status(200).json(updatedBlog);
     } catch (e){
