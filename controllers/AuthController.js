@@ -20,7 +20,11 @@ const register = async (req, res) => {
 
         const user = await User.register(name, email, password);
 
-        res.status(200).send(user);
+         // create token
+         const token = createToken(user._id, res);
+         if (token) {
+             return res.status(200).json(user);
+         }
     } catch (e) {
         return res.status(400).json({error: e.message});
     }
@@ -34,7 +38,7 @@ const login = async (req, res) => {
         // create token
         const token = createToken(user._id, res);
         if (token) {
-            res.status(200).json('You will be remembered');
+            return res.status(200).json(user);
         }
 
     }catch(e){
@@ -44,7 +48,7 @@ const login = async (req, res) => {
 
 const checkAuth = (req, res) => {
     try {
-        return res.status(200).json(req.user.name);
+        return res.status(200).json(req.user);
     } catch (e) {
         return res.status(400).json({error: e.message});
     }
