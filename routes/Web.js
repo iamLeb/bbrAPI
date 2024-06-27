@@ -6,6 +6,7 @@ const ContactController = require("../controllers/ContactController");
 const GalleryController = require("../controllers/GalleryController");
 const TestimonialController = require("../controllers/TestimonialController");
 
+
 /**
  * Category Routes
  */

@@ -75,7 +75,15 @@ UserSchema.statics.login = async function(email, password) {
      throw e;
  }
 }
-
+// Method to check if user is an admin
+UserSchema.statics.isAdmin = async function(id) {
+    try {
+        const user = await this.findById(id);
+        return user.type === 'admins';
+    } catch (e) {
+        throw e;
+    }
+};
 const User = mongoose.model("User", UserSchema);
 
 module.exports = User;
