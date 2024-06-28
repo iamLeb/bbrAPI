@@ -31,7 +31,7 @@ const getOne = async (req, res) => {
     try {
         const { id } = req.params;
         const category = await Service.getOne(Category, id);
-        if (!category) return res.status(404).send({error: 'Category not found'});
+        if (!category) return res.status(404).json({error: 'Category not found'});
 
         return res.status(200).json(category);
     } catch (e) {
