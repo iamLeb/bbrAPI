@@ -45,7 +45,7 @@ const update = async (req, res) => {
         const { name, message } = req.body;
         if (!name ) findId.message = message;
         if(!message) findId.name = name;
-
+        
 
         const updatedMessage = await Service.update(Comment, id, req.body);
         if (!updatedMessage) return res.status(400).json({error: 'There was an error updating the comment'});
