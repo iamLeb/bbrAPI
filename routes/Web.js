@@ -7,6 +7,7 @@ const GalleryController = require("../controllers/GalleryController");
 const TestimonialController = require("../controllers/TestimonialController");
 const ProvinceController = require("../controllers/ProvinceController");
 
+
 /**
  * Category Routes
  */
