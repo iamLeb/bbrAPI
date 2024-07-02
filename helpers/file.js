@@ -12,24 +12,30 @@ class FileService {
     secretAccessKey: AWS_SECRET_ACCESS_KEY,
   });
 
-  async uploadFileAWS(file) {
+async uploadFileAWS(file) {
     const params = {
-      Bucket: S3_BUCKET_NAME,
-      Key: file.originalname,
-      Body: file.buffer,
-      ACL: "public-read",
+        Bucket: S3_BUCKET_NAME,
+        Key: file.originalname,
+        Body: file.buffer,
+        ACL: "public-read",
     };
 
     const data = await this.s3.upload(params).promise();
     if (data.Location) {
-      const url = data.Location;
-      console.log(data);
-      return {
-        url: url,
-        name: data.Key,
-      };
+        const url = data.Location;
+        
+        // check if file is image or video
+        const isImage = file.mimetype.startsWith("image/");
+        const isVideo = file.mimetype.startsWith("video/");
+        const type = isImage ? "image" : isVideo ? "video" : "unknown";
+
+        return {
+            url: url,
+            name: data.Key,
+            type: type,
+        };
     }
-  }
+}
 }
 
 module.exports = FileService;

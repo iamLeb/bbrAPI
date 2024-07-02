@@ -52,13 +52,25 @@ const PropertySchema = new mongoose.Schema(
     video: {
       type: String,
     },
-    medias: {
-      type: [Schema.Types.ObjectId],
-      ref: "Media",
-    },
+    // media: {
+    //   type: [],
+    //   ref: "Media",
+    // },
   },
   { timestamps: true }
 );
+
+// Virtual property to fetch media where ownerId is propertyId
+PropertySchema.virtual('media', {
+    ref: 'Media',
+    localField: '_id',
+    foreignField: 'ownerId',
+    justOne: false,
+  });
+  
+  // Ensure virtual fields are included when converting to JSON or Object
+  PropertySchema.set('toObject', { virtuals: true });
+  PropertySchema.set('toJSON', { virtuals: true });
 
 const Property = mongoose.model("Property", PropertySchema);
 
