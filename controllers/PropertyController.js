@@ -89,6 +89,17 @@ class PropertyController {
       return res.status(500).json({ error: e.message });
     }
   };
+
+  static getOne = async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const property = await Property.findById(id).populate("media").exec();
+      return res.status(200).json(p);
+    } catch (error) {
+      return res.status(500).json({ error: e.message });
+    }
+  };
 }
 
 module.exports = PropertyController;
