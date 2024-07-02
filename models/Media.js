@@ -16,10 +16,6 @@ const mediaSchema = new mongoose.Schema(
       type: Schema.Types.ObjectId,
       required: true,
     },
-    id: {
-      type: Schema.Types.ObjectId,
-      required: true,
-    },
     name: {
       type: String,
       required: true,
