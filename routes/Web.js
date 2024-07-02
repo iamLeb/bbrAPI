@@ -9,6 +9,7 @@ const GalleryController = require("../controllers/GalleryController");
 const TestimonialController = require("../controllers/TestimonialController");
 const ProvinceController = require("../controllers/ProvinceController");
 const FileController = require("../controllers/FileController");
+const PropertyController = require("../controllers/PropertyController");
 const multer = require('multer');
 
 const inMemoryStorage = multer.memoryStorage();
@@ -147,10 +148,32 @@ router.use("/comment", commentRouter);
 const fileRouter = express.Router();
 
 fileRouter.post("/upload", uploadStrategy, FileController.uploadFile);
-
 fileRouter.post("/upload-multiple", uploadStrategyMultiple, FileController.uploadMultiple);
 
 // Use the file router for routes under /file
 router.use("/file", fileRouter);
+
+
+/**
+ * File Routes Ends
+ */
+
+
+/**
+ * Property Routes
+ */
+
+const propertyRouter = express.Router();
+
+propertyRouter.post("/", PropertyController.create);
+propertyRouter.get("/", PropertyController.getAll);
+
+// Use the file router for routes under /property
+router.use("/property", propertyRouter);
+
+
+/**
+ * File Routes Ends
+ */
 
 module.exports = router;
