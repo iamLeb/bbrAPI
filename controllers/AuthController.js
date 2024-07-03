@@ -81,7 +81,7 @@ const reset = async (req, res) => {
 
         const hash = await bcrypt.hash(newPassword, 10);
 
-        const updated = User.findOneAndUpdate({password: hash})
+        const updated = await Service.update(User,id,{password: hash})
         if (updated){
             return res.status(200).json('password created succesfully');
         }
