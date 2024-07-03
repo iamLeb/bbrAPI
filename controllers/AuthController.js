@@ -1,5 +1,11 @@
 const User = require('../models/User');
+const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const Service = require('../helpers/Services');
+const { findOneAndUpdate } = require('../models/Blog');
+const CheckAuthentication = require('../middlewares/CheckAuthentication');
+const validator = require('validator');
+
 
 const createToken = (_id, res) => {
     // creating the token
@@ -54,6 +60,35 @@ const checkAuth = (req, res) => {
     }
 }
 
+const reset = async (req, res) => {
+    try{
+        const { id } = req.params;
+        const user = await Service.getOne(User, id)
+        const {password, newPassword} = req.body;
+        const match = await bcrypt.compare(password, user.password);
+
+        if(!match) return res.status(400).json('incorrect older passsword');
+
+        if(!newPassword) return res.status(400).json('new password required');
+
+        if (newPassword.length < 6) {
+            throw new Error('Password must be at least 6 characters long');
+        }
+        // validate password strength
+        if (!validator.isStrongPassword(newPassword)) {
+            throw new Error('Password is not strong enough, please try again');
+        }
+
+        const hash = await bcrypt.hash(newPassword, 10);
+
+        return await User.findOneAndUpdate({password: hash})
+        return res.status(200).json('password created succesfully');
+    } catch(e) {
+         res.status(400).json({error: e.message});
+    }
+   
+}
+
 const logout = (req, res) => {
     try {
         res.clearCookie('token');
@@ -67,5 +102,6 @@ module.exports = {
     register,
     login,
     checkAuth,
-    logout
+    logout,
+    reset
 };
