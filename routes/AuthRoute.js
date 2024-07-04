@@ -7,5 +7,6 @@ router.post('/login', AuthController.login);
 router.get('/check', CheckAuthentication, AuthController.checkAuth);
 router.get('/logout', AuthController.logout);
 router.put('/reset/:id',AuthController.reset)
+router.put('/update/:id',AuthController.update)
 
 module.exports = router;
