@@ -72,11 +72,11 @@ const reset = async (req, res) => {
         if (!newPassword) return res.status(400).json({error: 'New password is required'});
 
         if (newPassword.length < 6) {
-            return res.status(400).json({error:'Password must be at least 6 characters long'});
+            return res.status(400).json({error: 'Password must be at least 6 characters long'})
         }
         // validate password strength
         if (!validator.isStrongPassword(newPassword)) {
-            return res.status(400).json({error:'Password is not strong enough, please try again'});
+            return res.status(400).json({error: 'Password is not strong enough, please try again'})
         }
 
         const hash = await bcrypt.hash(newPassword, 10);
