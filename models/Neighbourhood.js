@@ -7,5 +7,5 @@ const NeighbourhoodSchema= new mongoose.Schema({
     }
 }, { timestamps: true });
 
-const Neighbourhood = mongoose.model("Province",NeighbourhoodSchema);
+const Neighbourhood = mongoose.model("Neighbourhood",NeighbourhoodSchema);
 module.exports = Neighbourhood;
