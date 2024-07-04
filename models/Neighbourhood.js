@@ -1,4 +1,4 @@
-const mongoose = require('mongoOse');
+const mongoose = require('mongoose');
 
 const NeighbourhoodSchema= new mongoose.Schema({
     name:{
