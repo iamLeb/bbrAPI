@@ -94,6 +94,25 @@ const reset = async (req, res) => {
 
 }
 
+const update = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const {name} = req.body;
+
+        if(!name) return res.status(400).json({error: 'Name is required'});
+
+        const updated = await Service.update(User, id, {name});
+        if (!updated) {
+            return res.status(400).json({error: 'There was an error updating the name'});
+        }
+
+        return res.status(200).json(updated);
+
+    } catch (e) {
+        return res.status(400).json({error: e.message});
+    }
+}
+
 const logout = (req, res) => {
     try {
         res.clearCookie('token');
@@ -108,5 +127,6 @@ module.exports = {
     login,
     checkAuth,
     logout,
-    reset
+    reset,
+    update
 };
