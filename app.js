@@ -11,6 +11,21 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+// Handle uncaught exceptions and unhandled promise rejections
+// process.on('uncaughtException', (err) => {
+//     console.error('Uncaught Exception:', err);
+//     if (err.code === 'ETIMEDOUT') {
+//       process.exit(1); // Exit to restart the server
+//     }
+// });
+
+// process.on('unhandledRejection', (reason, promise) => {
+// console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+// if (reason.code === 'ETIMEDOUT') {
+//     process.exit(1); // Exit to restart the server
+// }
+// });
+
 app.use(cors({
     origin: true,
     credentials: true
