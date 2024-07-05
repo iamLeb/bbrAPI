@@ -24,26 +24,26 @@ const uploadStrategyMultiple = multer({ storage: inMemoryStorage, limits: { file
 // Create a new router for category routes
 const categoryRouter = express.Router();
 
-categoryRouter.post("/create", CategoryController.create);
+categoryRouter.post("/create",CheckAuthentication, CategoryController.create);
 categoryRouter.get("/", CategoryController.getAll);
 categoryRouter.get("/:id", CategoryController.getOne);
-categoryRouter.put("/:id", CategoryController.update);
-categoryRouter.delete("/:id", CategoryController.destroy);
+categoryRouter.put("/:id",CheckAuthentication, CategoryController.update);
+categoryRouter.delete("/:id", CheckAuthentication, CategoryController.destroy);
 
 // Use the category router for routes under /category
-router.use("/category", CheckAuthentication, categoryRouter);
+router.use("/category", categoryRouter);
 
 // Create a new router for blog routes
 const blogRouter = express.Router();
 
-blogRouter.post("/create", BlogController.create);
+blogRouter.post("/create",CheckAuthentication, BlogController.create);
 blogRouter.get("/", BlogController.getAll);
 blogRouter.get("/:id", BlogController.getOne);
-blogRouter.put("/:id", BlogController.update);
-blogRouter.delete("/:id", BlogController.destroy);
+blogRouter.put("/:id",CheckAuthentication, BlogController.update);
+blogRouter.delete("/:id",CheckAuthentication, BlogController.destroy);
 
 // Use the blog router for routes under /blog
-router.use("/blog", CheckAuthentication, blogRouter);
+router.use("/blog", blogRouter);
 /**
  * Category Routes Ends
  */
@@ -54,10 +54,10 @@ router.use("/blog", CheckAuthentication, blogRouter);
 // Create a new router for Contact routes
 const contactRouter = express.Router();
 
-contactRouter.post("/create", ContactController.create);
+contactRouter.post("/create", CheckAuthentication, ContactController.create);
 contactRouter.get("/", ContactController.getAll);
 contactRouter.get("/:id", ContactController.getOne);
-contactRouter.delete("/:id", ContactController.destroy);
+contactRouter.delete("/:id",CheckAuthentication,  ContactController.destroy);
 
 // Use the Contact router for routes under /Contact
 router.use("/contact", contactRouter);
@@ -72,14 +72,14 @@ router.use("/contact", contactRouter);
 // Create a new router for Gallery routes
 const galleryRouter = express.Router();
 
-galleryRouter.post("/create", GalleryController.create);
+galleryRouter.post("/create",CheckAuthentication, GalleryController.create);
 galleryRouter.get("/", GalleryController.getAll);
 galleryRouter.get("/:id", GalleryController.getOne);
-galleryRouter.put("/:id", GalleryController.update);
-galleryRouter.delete("/:id", GalleryController.destroy);
+galleryRouter.put("/:id",CheckAuthentication, GalleryController.update);
+galleryRouter.delete("/:id",CheckAuthentication, GalleryController.destroy);
 
 // Use the Gallery router for routes under /Gallery
-router.use("/gallery", CheckAuthentication, galleryRouter);
+router.use("/gallery", galleryRouter);
 
 /**
  * Gallery Routes Ends
@@ -91,14 +91,14 @@ router.use("/gallery", CheckAuthentication, galleryRouter);
 // Create a new router for Testimonial routes
 const testimonial = express.Router();
 
-testimonial.post("/create", TestimonialController.create);
+testimonial.post("/create",CheckAuthentication, TestimonialController.create);
 testimonial.get("/", TestimonialController.getAll);
 testimonial.get("/:id", TestimonialController.getOne);
-testimonial.put("/:id", TestimonialController.update);
-testimonial.delete("/:id", TestimonialController.destroy);
+testimonial.put("/:id",CheckAuthentication, TestimonialController.update);
+testimonial.delete("/:id", CheckAuthentication, TestimonialController.destroy);
 
 // Use the testimonial router for routes under /testimonial
-router.use("/testimonial", CheckAuthentication, testimonial);
+router.use("/testimonial", testimonial);
 
 /**
  * Testimonial Routes Ends
@@ -110,14 +110,14 @@ router.use("/testimonial", CheckAuthentication, testimonial);
 // Create a new router for province routes
 const neighbourhoodRouter = express.Router();
 
-neighbourhoodRouter.post("/create", NeighbourhoodController.create);
+neighbourhoodRouter.post("/create",CheckAuthentication, NeighbourhoodController.create);
 neighbourhoodRouter.get("/", NeighbourhoodController.getAll);
 neighbourhoodRouter.get("/:id", NeighbourhoodController.getOne);
-neighbourhoodRouter.put("/:id", NeighbourhoodController.update);
-neighbourhoodRouter.delete("/:id", NeighbourhoodController.destroy);
+neighbourhoodRouter.put("/:id",CheckAuthentication, NeighbourhoodController.update);
+neighbourhoodRouter.delete("/:id",CheckAuthentication, NeighbourhoodController.destroy);
 
 // Use the category router for routes under /category
-router.use("/neighbourhood", CheckAuthentication, neighbourhoodRouter);
+router.use("/neighbourhood", neighbourhoodRouter);
 
 /**
  * Province Routes Ends
@@ -128,11 +128,11 @@ router.use("/neighbourhood", CheckAuthentication, neighbourhoodRouter);
  */
 const commentRouter = express.Router();
 
-commentRouter.post("/create", CommentController.create);
+commentRouter.post("/create",CheckAuthentication, CommentController.create);
 commentRouter.get("/", CommentController.getAll);
 commentRouter.get("/:id", CommentController.getOne);
-commentRouter.put("/:id", CommentController.update);
-commentRouter.delete("/:id", CommentController.destroy);
+commentRouter.put("/:id",CheckAuthentication, CommentController.update);
+commentRouter.delete("/:id",CheckAuthentication, CommentController.destroy);
 
 // Use the comment router for routes under /comment
 router.use("/comment", commentRouter);
