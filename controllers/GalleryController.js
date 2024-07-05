@@ -3,10 +3,11 @@ const Gallery = require('../models/Gallery');
 
 const create = async (req, res) => {
     try {
-        const { image, province } = req.body;
-        if (!image || !province) return res.status(400).json({error: 'All fields are required'});
 
-        const exist = await Service.getByField(Gallery, 'province', province);
+        const { image, neighbourhood } = req.body;
+        if (!image || !neighbourhood) return res.status(400).json({error: 'All fields are required'});
+
+        const exist = await Service.getByField(Gallery, 'neighbourhood', neighbourhood);
         if (exist) return res.status(400).json({error: 'Gallery already exists'});
 
         const gallery = await Service.create(Gallery, req.body);
@@ -46,10 +47,10 @@ const update = async (req, res) => {
         const findId = await Service.getOne(Gallery, id);
         if(!findId) return res.status(404).json({error: 'Gallery not found'});
 
-        const { image, province } = req.body;
-        if (!image || !province) return res.status(400).json({error: 'All fields are required'});
+        const { image, neighbourhood } = req.body;
+        if (!image || !neighbourhood) return res.status(400).json({error: 'All fields are required'});
 
-        const exist = await Service.getByField(Gallery, 'province', province);
+        const exist = await Service.getByField(Gallery, 'neighbourhood', neighbourhood);
         if (exist && exist._id.toString() !== id) return res.status(400).json({error: 'Gallery already exists'});
 
         const updatedGallery = await Service.update(Gallery, id, req.body);

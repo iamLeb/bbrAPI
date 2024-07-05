@@ -6,9 +6,9 @@ const GallerySchema=new mongoose.Schema({
       type: String,
       required: true
   },
-  province:{
+  neighbourhood:{
      type:Schema.Types.ObjectId,
-      ref:"Province",
+      ref:"Neighbourhood",
       required:true
   }
 }, { timestamps: true });
