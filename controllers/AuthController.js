@@ -35,6 +35,18 @@ const register = async (req, res) => {
         return res.status(400).json({error: e.message});
     }
 }
+const agentregister = async (req, res) => {
+    try {
+        const {name, email, password,type} = req.body;
+
+        const user = await User.registeragent(name, email, password, type);
+
+        // create token
+       
+    } catch (e) {
+        return res.status(400).json({error: e.message});
+    }
+}
 
 const login = async (req, res) => {
     try {
@@ -128,5 +140,6 @@ module.exports = {
     checkAuth,
     logout,
     reset,
-    update
+    update,
+    agentregister
 };
