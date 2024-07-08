@@ -4,6 +4,7 @@ const Media = require("../models/Media");
 const create = async (req, res) => {
   try {
     const { type, url, ownerId, name } = req.body;
+    console.log(req.body)
     if (!type || !url || !ownerId || !name)
       return res.status(400).json({ error: "All fields required" });
 
@@ -65,3 +66,11 @@ const destroy = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+module.exports = {
+  create,
+  getMediaForOwner,
+  getAll,
+  getOne,
+  destroy
+}

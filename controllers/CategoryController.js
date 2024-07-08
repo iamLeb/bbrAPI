@@ -3,7 +3,7 @@ const Category = require('../models/Category');
 
 const create = async (req, res) => {
     try {
-        console.log('Fetching Category')
+
         const { name } = req.body;
         if (!name) return res.status(400).json({error: 'Category name is required'});
 

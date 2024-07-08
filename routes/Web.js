@@ -10,6 +10,7 @@ const TestimonialController = require("../controllers/TestimonialController");
 const NeighbourhoodController = require("../controllers/NeighbourhoodController");
 const FileController = require("../controllers/FileController");
 const PropertyController = require("../controllers/PropertyController");
+const MediaController = require("../controllers/MediaController");
 const multer = require('multer');
 
 const inMemoryStorage = multer.memoryStorage();
@@ -76,7 +77,7 @@ galleryRouter.post("/create",CheckAuthentication, GalleryController.create);
 galleryRouter.get("/", GalleryController.getAll);
 galleryRouter.get("/:id", GalleryController.getOne);
 galleryRouter.put("/:id",CheckAuthentication, GalleryController.update);
-galleryRouter.delete("/:id",CheckAuthentication, GalleryController.destroy);
+galleryRouter.delete("/:id", GalleryController.destroy);
 
 // Use the Gallery router for routes under /Gallery
 router.use("/gallery", galleryRouter);
@@ -157,6 +158,23 @@ router.use("/file", fileRouter);
 /**
  * File Routes Ends
  */
+
+/**
+ * File Routes
+ */
+
+const mediaRouter = express.Router();
+
+mediaRouter.post("/create", MediaController.create);
+
+// Use the file router for routes under /file
+router.use("/media", mediaRouter);
+
+
+/**
+ * File Routes Ends
+ */
+
 
 
 /**
