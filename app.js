@@ -39,7 +39,7 @@ app.get('/up', (req, res) => {
   
   // Use CORS middleware with options
   app.use(cors({
-    origin: ['http://localhost:8080', 'https://bbrclient.onrender.com'],
+    origin: 'https://bbrclient.onrender.com',
     credentials: true   
   }));
   
