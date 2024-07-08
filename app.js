@@ -26,8 +26,13 @@ app.use(cookieParser());
 // }
 // });
 
+
+app.get('/up', (req, res) => {
+    return res.send('Server running');
+});
+
 app.use(cors({
-    origin: true,
+    origin: ["http://localhost:8080"],
     credentials: true
 }));
 
