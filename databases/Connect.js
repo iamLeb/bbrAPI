@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 
+console.log("Attempt Connect to DB")
 const connect = mongoose.connect(process.env.DB, {
     useNewUrlParser: true,
     useUnifiedTopology: true,

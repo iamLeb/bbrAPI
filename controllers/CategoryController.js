@@ -3,6 +3,7 @@ const Category = require('../models/Category');
 
 const create = async (req, res) => {
     try {
+        console.log('Fetching Category')
         const { name } = req.body;
         if (!name) return res.status(400).json({error: 'Category name is required'});
 
@@ -12,6 +13,7 @@ const create = async (req, res) => {
         const category = await Service.create(Category, req.body);
         if (!category) return res.status(400).json({error: 'There was an error creating the category'});
 
+        console.log(category)
         return res.status(201).json(category);
     } catch (e) {
         return res.status(500).json({error: e.message});
