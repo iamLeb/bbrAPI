@@ -31,17 +31,14 @@ app.get('/up', (req, res) => {
     return res.send('Server running');
 });
 
-// const corsOptions = {
-//     origin: process.env.CORS, // Allow only this origin
-//     optionsSuccessStatus: 204,
-//     "methods": "GET,PUT,PATCH,HEAD,POST", // Allow only these methods
-// };
+const corsOptions = {
+    origin: process.env.VITE_CORS, // Allow only this origin
+    optionsSuccessStatus: 204,
+    "methods": "GET,PUT,PATCH,HEAD,POST", // Allow only these methods
+};
   
   // Use CORS middleware with options
-  app.use(cors({
-    origin: 'https://bbrclient.onrender.com',
-    credentials: true   
-  }));
+  app.use(cors(corsOptions));
   
 
 const router = require('./routes/Web');
