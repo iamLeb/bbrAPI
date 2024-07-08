@@ -33,8 +33,9 @@ app.get('/up', (req, res) => {
 
 const corsOptions = {
     origin: process.env.CORS, // Allow only this origin
-    methods: ['GET', 'POST'], // Allow only these methods
-  };
+    optionsSuccessStatus: 204,
+    "methods": "GET,PUT,PATCH,HEAD,DELETE,POST", // Allow only these methods
+};
   
   // Use CORS middleware with options
   app.use(cors(corsOptions));
