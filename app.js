@@ -32,7 +32,7 @@ app.get('/up', (req, res) => {
 });
 
 app.use(cors({
-    origin: ["http://localhost:8080"],
+    origin: [process.env.CORS],
     credentials: true
 }));
 
