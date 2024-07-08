@@ -20,28 +20,25 @@ app.use(cookieParser());
 // });
 
 // process.on('unhandledRejection', (reason, promise) => {
-//     console.error('Unhandled Rejection at:', promise, 'reason:', reason);
-//     if (reason.code === 'ETIMEDOUT') {
-//         process.exit(1); // Exit to restart the server
-//     }
+// console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+// if (reason.code === 'ETIMEDOUT') {
+//     process.exit(1); // Exit to restart the server
+// }
 // });
+
 
 app.get('/up', (req, res) => {
     return res.send('Server running');
 });
 
-// Middleware to handle CORS
-app.use(cors({
-    origin: (origin, callback) => {
-        const allowedOrigins = process.env.CORS.split(',');
-        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    credentials: true
-}));
+const corsOptions = {
+    origin: process.env.CORS, // Allow only this origin
+    methods: ['GET', 'POST'], // Allow only these methods
+  };
+  
+  // Use CORS middleware with options
+  app.use(cors(corsOptions));
+  
 
 const router = require('./routes/Web');
 const authRoute = require('./routes/AuthRoute');
@@ -49,5 +46,6 @@ const authRoute = require('./routes/AuthRoute');
 app.use(router); // other routes
 
 app.use('/auth', authRoute); // auth routes
+
 
 app.listen(port, () => console.log(`Listening on port ${port}`));
