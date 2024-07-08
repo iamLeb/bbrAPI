@@ -13,7 +13,7 @@ const corsOptions = {
   origin: process.env.VITE_CORS || 'http://localhost:8080', // Allow only this origin
   optionsSuccessStatus: 204,
   methods: "GET,PUT,CREATE,DELETE,PATCH,HEAD,POST", // Allow only these methods
-  credentials: true
+  credentials: true // set to true
 };
 
 // Use CORS middleware with options
