@@ -160,19 +160,19 @@ router.use("/file", fileRouter);
  */
 
 /**
- * File Routes
+ * Media Routes
  */
 
 const mediaRouter = express.Router();
 
 mediaRouter.post("/create", MediaController.create);
 
-// Use the file router for routes under /file
+// Use the media router for routes under /media
 router.use("/media", mediaRouter);
 
 
 /**
- * File Routes Ends
+ * Media Routes Ends
  */
 
 

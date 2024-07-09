@@ -15,10 +15,20 @@ const PropertySchema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
+    city: {
+      type: String,
+      required: true
+    },
+    neighbourhood: {
+      type: Schema.Types.ObjectId,
+      ref: "Neighbourhood",
+      required: true
+    },
     address: {
       type: String,
       required: true,
     },
+
     title: {
       type: String,
       required: true,
