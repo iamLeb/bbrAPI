@@ -10,6 +10,8 @@ const TestimonialController = require("../controllers/TestimonialController");
 const NeighbourhoodController = require("../controllers/NeighbourhoodController");
 const FileController = require("../controllers/FileController");
 const PropertyController = require("../controllers/PropertyController");
+const AvailabilityController = require("../controllers/AvailabilityController");
+
 const multer = require('multer');
 
 const inMemoryStorage = multer.memoryStorage();
@@ -171,6 +173,19 @@ propertyRouter.get("/", PropertyController.getAll);
 // Use the file router for routes under /property
 router.use("/property", propertyRouter);
 
+
+/**
+ * Availability Routes
+ */
+// Create a new router for availability routes
+const availabilityRouter = express.Router();
+
+availabilityRouter.post("/create", AvailabilityController.create);
+
+// Use the availability router for routes under /availability
+router.use("/availability", CheckAuthentication, availabilityRouter);
+
+module.exports = router;
 
 /**
  * File Routes Ends
