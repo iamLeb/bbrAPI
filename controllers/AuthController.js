@@ -41,8 +41,7 @@ const agentregister = async (req, res) => {
 
         const user = await User.registeragent(name, email, password, type);
 
-        // create token
-       
+        return res.status(200).json(user);
     } catch (e) {
         return res.status(400).json({error: e.message});
     }
