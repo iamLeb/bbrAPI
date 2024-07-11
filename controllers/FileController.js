@@ -16,7 +16,7 @@ class FileController {
 
   // upload multiple
   static uploadMultiple = async (req, res) => {
-    try {
+    try {      
       const files = req.files;
       const fileService = new FileService();
       const urls = [];
