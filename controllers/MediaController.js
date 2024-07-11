@@ -4,7 +4,6 @@ const Media = require("../models/Media");
 const create = async (req, res) => {
   try {
     const { type, url, ownerId, name } = req.body;
-    console.log(req.body)
     if (!type || !url || !ownerId || !name)
       return res.status(400).json({ error: "All fields required" });
 
@@ -23,6 +22,8 @@ const create = async (req, res) => {
 const getMediaForOwner = async (req, res) => {
   try {
     const { ownerId } = req.params;
+    console.log(ownerId);
+
     const media = await Service.getByField(Media, "ownerId", ownerId);
     if (!media) return res.status(404).json({ error: "Media not found" });
 

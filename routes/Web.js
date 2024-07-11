@@ -166,10 +166,10 @@ router.use("/file", fileRouter);
 const mediaRouter = express.Router();
 
 mediaRouter.post("/create", MediaController.create);
+mediaRouter.get('/getMediaForOwner/:ownerId', MediaController.getMediaForOwner);
 
 // Use the media router for routes under /media
 router.use("/media", mediaRouter);
-
 
 /**
  * Media Routes Ends
