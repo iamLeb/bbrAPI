@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const {Schema} = require("mongoose");
+const { Schema } = require("mongoose");
 
 const PropertySchema = new mongoose.Schema(
     {
@@ -28,7 +28,6 @@ const PropertySchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-
         title: {
             type: String,
             required: true,
@@ -61,16 +60,18 @@ const PropertySchema = new mongoose.Schema(
         video: {
             type: String,
         },
-        // media: {
-        //   type: [],
-        //   ref: "Media",
-        // },
+        // media: [
+        //     {
+        //         type: Schema.Types.ObjectId,
+        //         ref: "Media",
+        //     }
+        // ],
     },
-    {timestamps: true}
+    { timestamps: true }
 );
 
 // Virtual property to fetch media where ownerId is propertyId
-PropertySchema.virtual('media', {
+PropertySchema.virtual('mediaVirtual', {
     ref: 'Media',
     localField: '_id',
     foreignField: 'ownerId',
@@ -78,8 +79,8 @@ PropertySchema.virtual('media', {
 });
 
 // Ensure virtual fields are included when converting to JSON or Object
-PropertySchema.set('toObject', {virtuals: true});
-PropertySchema.set('toJSON', {virtuals: true});
+PropertySchema.set('toObject', { virtuals: true });
+PropertySchema.set('toJSON', { virtuals: true });
 
 const Property = mongoose.model("Property", PropertySchema);
 

@@ -12,7 +12,6 @@ class PropertyController {
                 title,
                 bed,
                 bath,
-                media,
                 description,
                 sqft,
                 yearBuilt,
@@ -29,7 +28,6 @@ class PropertyController {
                 !price ||
                 !address ||
                 !category ||
-                !media ||
                 !bed ||
                 !bath
             )
