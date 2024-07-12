@@ -12,13 +12,19 @@ const FileController = require("../controllers/FileController");
 const PropertyController = require("../controllers/PropertyController");
 const AvailabilityController = require("../controllers/AvailabilityController");
 
-const multer = require('multer');
+const multer = require("multer");
 
 const inMemoryStorage = multer.memoryStorage();
-const uploadStrategy = multer({ storage: inMemoryStorage, limits: { fileSize: 100 * 1024 * 1024 } }).single('file');
+const uploadStrategy = multer({
+  storage: inMemoryStorage,
+  limits: { fileSize: 100 * 1024 * 1024 },
+}).single("file");
 
 // for multiple files
-const uploadStrategyMultiple = multer({ storage: inMemoryStorage, limits: { fileSize: 100 * 1024 * 1024 } }).array('files', 10);
+const uploadStrategyMultiple = multer({
+  storage: inMemoryStorage,
+  limits: { fileSize: 100 * 1024 * 1024 },
+}).array("files", 10);
 
 /**
  * Category Routes
@@ -150,16 +156,18 @@ router.use("/comment", commentRouter);
 const fileRouter = express.Router();
 
 fileRouter.post("/upload", uploadStrategy, FileController.uploadFile);
-fileRouter.post("/upload-multiple", uploadStrategyMultiple, FileController.uploadMultiple);
+fileRouter.post(
+  "/upload-multiple",
+  uploadStrategyMultiple,
+  FileController.uploadMultiple
+);
 
 // Use the file router for routes under /file
 router.use("/file", fileRouter);
 
-
 /**
  * File Routes Ends
  */
-
 
 /**
  * Property Routes
@@ -172,7 +180,6 @@ propertyRouter.get("/", PropertyController.getAll);
 
 // Use the file router for routes under /property
 router.use("/property", propertyRouter);
-
 
 /**
  * Availability Routes
