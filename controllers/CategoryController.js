@@ -4,7 +4,7 @@ const Category = require('../models/Category');
 const create = async (req, res) => {
     try {
 
-        const { name } = req.body;
+        const {name} = req.body;
         if (!name) return res.status(400).json({error: 'Category name is required'});
 
         const exist = await Service.getByField(Category, 'name', name);
@@ -13,7 +13,6 @@ const create = async (req, res) => {
         const category = await Service.create(Category, req.body);
         if (!category) return res.status(400).json({error: 'There was an error creating the category'});
 
-        console.log(category)
         return res.status(201).json(category);
     } catch (e) {
         return res.status(500).json({error: e.message});
@@ -22,7 +21,10 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const categories = await Service.getAll(Category);
+        let categories = await Service.getAll(Category);
+        categories = categories.filter(category => category.active);
+
+        console.log(categories)
         return res.status(200).json(categories);
     } catch (e) {
         return res.status(500).json({error: e.message});
@@ -31,7 +33,7 @@ const getAll = async (req, res) => {
 
 const getOne = async (req, res) => {
     try {
-        const { id } = req.params;
+        const {id} = req.params;
         const category = await Service.getOne(Category, id);
         if (!category) return res.status(404).json({error: 'Category not found'});
 
@@ -43,12 +45,12 @@ const getOne = async (req, res) => {
 
 const update = async (req, res) => {
     try {
-        const { id } = req.params;
+        const {id} = req.params;
 
         const findId = await Service.getOne(Category, id);
-        if(!findId) return res.status(404).json({error: 'Category not found'});
+        if (!findId) return res.status(404).json({error: 'Category not found'});
 
-        const { name } = req.body;
+        const {name} = req.body;
         if (!name) return res.status(400).json({error: 'Category name is required'});
 
         const exist = await Service.getByField(Category, 'name', name);
@@ -63,15 +65,31 @@ const update = async (req, res) => {
     }
 }
 
-const destroy = async (req, res) => {
+// const destroy = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//
+//         const findId = await Service.getOne(Category, id);
+//         if(!findId) return res.status(404).json({error: 'Category not found'});
+//
+//         await Service.destroy(Category, id);
+//         return res.status(200).json({message: 'Category destroyed'});
+//     } catch (e) {
+//         return res.status(500).json({error: e.message});
+//     }
+// }
+
+const softDelete = async (req, res) => {
     try {
-        const { id } = req.params;
+        const {id} = req.params;
 
-        const findId = await Service.getOne(Category, id);
-        if(!findId) return res.status(404).json({error: 'Category not found'});
+        const category = await Service.getOne(Category, id);
+        if (!category) return res.status(404).json({error: 'Category not found'});
 
-        await Service.destroy(Category, id);
-        return res.status(200).json({message: 'Category destroyed'});
+        category.active = false;
+        await category.save();
+
+        return res.status(200).json({message: 'Category deleted'});
     } catch (e) {
         return res.status(500).json({error: e.message});
     }
@@ -82,5 +100,5 @@ module.exports = {
     getAll,
     getOne,
     update,
-    destroy
+    softDelete
 }

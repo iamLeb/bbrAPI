@@ -5,8 +5,12 @@ const CategorySchema = new mongoose.Schema({
         type: String,
         required: true,
         unique: true
+    },
+    active: {
+        type: Boolean,
+        default: true
     }
-}, { timestamps: true });
+}, {timestamps: true});
 
 const Category = mongoose.model('Category', CategorySchema);
 
