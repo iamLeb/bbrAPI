@@ -184,7 +184,7 @@ router.use("/media", mediaRouter);
 
 const propertyRouter = express.Router();
 
-propertyRouter.post("/", PropertyController.create);
+propertyRouter.post("/create", PropertyController.create);
 propertyRouter.get("/", PropertyController.getAll);
 
 // Use the file router for routes under /property
