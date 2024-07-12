@@ -8,7 +8,10 @@ const create = async (req, res) => {
         if (!name) return res.status(400).json({error: 'Category name is required'});
 
         const exist = await Service.getByField(Category, 'name', name);
-        if (exist) return res.status(400).json({error: 'Category already exists'});
+        if (exist) {
+            exist.active = true
+            return res.status(201).json(exist);
+        }
 
         const category = await Service.create(Category, req.body);
         if (!category) return res.status(400).json({error: 'There was an error creating the category'});
@@ -24,7 +27,6 @@ const getAll = async (req, res) => {
         let categories = await Service.getAll(Category);
         categories = categories.filter(category => category.active);
 
-        console.log(categories)
         return res.status(200).json(categories);
     } catch (e) {
         return res.status(500).json({error: e.message});
