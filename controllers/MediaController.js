@@ -22,8 +22,6 @@ const create = async (req, res) => {
 const getMediaForOwner = async (req, res) => {
   try {
     const { ownerId } = req.params;
-    console.log(ownerId);
-
     const media = await Service.getByField(Media, "ownerId", ownerId);
     if (!media) return res.status(404).json({ error: "Media not found" });
 

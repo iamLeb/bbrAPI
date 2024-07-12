@@ -29,7 +29,7 @@ categoryRouter.post("/create",CheckAuthentication, CategoryController.create);
 categoryRouter.get("/", CategoryController.getAll);
 categoryRouter.get("/:id", CategoryController.getOne);
 categoryRouter.put("/:id",CheckAuthentication, CategoryController.update);
-categoryRouter.delete("/:id", CheckAuthentication, CategoryController.destroy);
+categoryRouter.delete("/:id", CheckAuthentication, CategoryController.softDelete);
 
 // Use the category router for routes under /category
 router.use("/category", categoryRouter);
