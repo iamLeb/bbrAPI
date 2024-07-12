@@ -65,3 +65,11 @@ const destroy = async (req, res) => {
     return res.status(500).json({ error: error.message });
   }
 };
+
+module.exports = {
+  create,
+  getMediaForOwner,
+  getAll,
+  getOne,
+  destroy
+}

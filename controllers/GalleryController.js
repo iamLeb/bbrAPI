@@ -4,8 +4,8 @@ const Gallery = require('../models/Gallery');
 const create = async (req, res) => {
     try {
 
-        const { image, neighbourhood } = req.body;
-        if (!image || !neighbourhood) return res.status(400).json({error: 'All fields are required'});
+        const { neighbourhood } = req.body;
+        if (!neighbourhood) return res.status(400).json({error: 'All fields are required'});
 
         const exist = await Service.getByField(Gallery, 'neighbourhood', neighbourhood);
         if (exist) return res.status(400).json({error: 'Gallery already exists'});

@@ -3,8 +3,8 @@ const Blog = require('../models/Blog');
 
 const create = async (req, res) => {
     try {
-        const { title,image,content,category } = req.body;
-        if (!title || !image || !content || !category) return res.status(400).json({error: 'All fields required'});
+        const { title,content,category } = req.body;
+        if (!title || !content || !category) return res.status(400).json({error: 'All fields required'});
 
         const blog = await Service.create(Blog, req.body);
         if (!blog) return res.status(400).json({error: 'There was an error creating the Blog'});

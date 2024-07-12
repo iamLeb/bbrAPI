@@ -52,7 +52,40 @@ UserSchema.statics.register = async function(name, email, password) {
         const hash = await bcrypt.hash(password, 10);
 
         // create the user
-        return await this.create({ name, email, password: hash});
+        return await this.create({ name, email, password: hash,});
+
+    } catch (e) {
+        throw e;
+    }
+};
+UserSchema.statics.registeragent = async function(name, email, password,type) {
+    try {
+        // Validate the input fields
+        if (!name || !email || !password ||!type) {
+            throw new Error('All fields are required');
+        }
+        if (!validator.isEmail(email)) {
+            throw new Error('You have entered an invalid email');
+        }
+        // validate password length
+        if (password.length < 6) {
+            throw new Error('Password must be at least 6 characters long');
+        }
+        // validate password strength
+        if (!validator.isStrongPassword(password)) {
+            throw new Error('Password is not strong enough, please try again');
+        }
+        // if email exists
+        const exist = await this.findOne({email});
+        if (exist) {
+            throw new Error('Account already exists');
+        }
+
+        // hash password
+        const hash = await bcrypt.hash(password, 10);
+
+        // create the user
+        return await this.create({ name, email, password: hash, type});
 
     } catch (e) {
         throw e;
