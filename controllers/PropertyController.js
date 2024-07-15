@@ -70,7 +70,6 @@ const update = async (req, res) => {
         if (!property) return res.status(404).json({error: 'Property not found'});
 
         const {
-            image,
             title,
             address,
             price,
@@ -85,7 +84,7 @@ const update = async (req, res) => {
             description
         } = req.body;
         const update = await Service.update(Property, id, req.body);
-        if (!image||!title || !address || !price || !bed || !bath || !category || !description) {
+        if (!title || !address || !bed || !bath || !category || !description) {
             return res.status(400).json({error: "Not all fields inputed", update});
         }
 
