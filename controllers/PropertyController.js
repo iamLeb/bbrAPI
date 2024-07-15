@@ -33,28 +33,9 @@ class PropertyController {
 
             const property = await Service.create(Property, req.body);
             if (!property)
-                return res
-                    .status(400)
-                    .json({error: "There was an error creating the property"});
+                return res.status(400).json({error: "There was an error creating the property"});
 
-            if (media.length > 0) {
-                const mediaPromises = media.map(async (m) => {
-                    const data = {
-                        type: m.type,
-                        url: m.url,
-                        ownerId: property.id,
-                        name: m.name,
-                    };
-
-                    await Service.create(Media, data);
-                });
-
-                await Promise.all(mediaPromises);
-            }
-
-            const populatedProperty = await Property.findById(property.id).populate("media").exec();
-
-            return res.status(200).json(populatedProperty);
+            return res.status(200).json(property);
         } catch (e) {
             return res.status(500).json({error: e.message});
         }
