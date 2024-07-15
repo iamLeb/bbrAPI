@@ -6,38 +6,36 @@ class PropertyController {
     static create = async (req, res) => {
         try {
             const {
-                price,
-                category,
-                address,
                 title,
+                address,
+                price,
                 bed,
                 bath,
-                description,
+                category,
+                city,
+                neighbourhood,
                 sqft,
                 yearBuilt,
                 landArea,
+                description,
             } = req.body;
-
-            // Check if media is an array, else throw error
-            if (media && !Array.isArray(media))
-                return res.status(400).json({ error: "Media should be an array" });
 
             if (
                 !title ||
-                !description ||
-                !price ||
                 !address ||
-                !category ||
+                !price ||
                 !bed ||
-                !bath
+                !bath||
+                !category ||
+                !description 
             )
-                return res.status(400).json({ error: "All fields are required" });
+                return res.status(400).json({error: "All fields are required"});
 
             const property = await Service.create(Property, req.body);
             if (!property)
                 return res
                     .status(400)
-                    .json({ error: "There was an error creating the property" });
+                    .json({error: "There was an error creating the property"});
 
             if (media.length > 0) {
                 const mediaPromises = media.map(async (m) => {
@@ -58,13 +56,13 @@ class PropertyController {
 
             return res.status(200).json(populatedProperty);
         } catch (e) {
-            return res.status(500).json({ error: e.message });
+            return res.status(500).json({error: e.message});
         }
     };
 
     static getAll = async (req, res) => {
         try {
-            const { page = 1, limit = 2 } = req.query;
+            const {page = 1, limit = 2} = req.query;
             const skip = (page - 1) * limit;
 
             const properties = await Property.find()
@@ -83,38 +81,38 @@ class PropertyController {
                 currentPage: page,
             });
         } catch (e) {
-            return res.status(500).json({ error: e.message });
+            return res.status(500).json({error: e.message});
         }
     };
 
     static getOne = async (req, res) => {
         try {
-            const { id } = req.params;
+            const {id} = req.params;
 
             const property = await Property.findById(id).populate("media").exec();
             if (!property) {
-                return res.status(404).json({ error: "Property not found" });
+                return res.status(404).json({error: "Property not found"});
             }
 
             return res.status(200).json(property);
         } catch (error) {
-            return res.status(500).json({ error: error.message });
+            return res.status(500).json({error: error.message});
         }
     };
 
     static destroy = async (req, res) => {
         try {
-            const { id } = req.params;
+            const {id} = req.params;
             const property = await Service.getOne(Property, id);
-            if (!property) return res.status(404).json({ error: 'Property not found' });
+            if (!property) return res.status(404).json({error: 'Property not found'});
 
             // Delete associated media
-            await Media.deleteMany({ ownerId: id });
+            await Media.deleteMany({ownerId: id});
 
             await Service.destroy(Property, id);
-            return res.status(200).json({ message: 'Property destroyed' });
+            return res.status(200).json({message: 'Property destroyed'});
         } catch (e) {
-            return res.status(500).json({ error: e.message });
+            return res.status(500).json({error: e.message});
         }
     };
 }
