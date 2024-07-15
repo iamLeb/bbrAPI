@@ -43,24 +43,8 @@ class PropertyController {
 
     static getAll = async (req, res) => {
         try {
-            const {page = 1, limit = 2} = req.query;
-            const skip = (page - 1) * limit;
-
-            const properties = await Property.find()
-                .populate("media")
-                .skip(skip)
-                .limit(limit)
-                .exec();
-
-            // Optional: Get total count for pagination metadata
-            const totalProperties = await Property.countDocuments();
-
-            return res.status(200).json({
-                properties,
-                totalProperties,
-                totalPages: Math.ceil(totalProperties / limit),
-                currentPage: page,
-            });
+            const properties = await Service.getAll(Property);
+            return res.status(200).json(properties);
         } catch (e) {
             return res.status(500).json({error: e.message});
         }
