@@ -25,9 +25,9 @@ class PropertyController {
                 !address ||
                 !price ||
                 !bed ||
-                !bath||
+                !bath ||
                 !category ||
-                !description 
+                !description
             )
                 return res.status(400).json({error: "All fields are required"});
 
@@ -54,7 +54,7 @@ class PropertyController {
         try {
             const {id} = req.params;
 
-            const property = await Property.findById(id).populate("media").exec();
+            const property = await Service.getOne(Property, id);
             if (!property) {
                 return res.status(404).json({error: "Property not found"});
             }
