@@ -1,5 +1,4 @@
 const Property = require("../models/Property");
-const Media = require("../models/Media");
 const Service = require("../helpers/Services");
 
 const create = async (req, res) => {
@@ -71,6 +70,7 @@ const update = async (req, res) => {
         if (!property) return res.status(404).json({error: 'Property not found'});
 
         const {
+            image,
             title,
             address,
             price,
@@ -85,7 +85,7 @@ const update = async (req, res) => {
             description
         } = req.body;
         const update = await Service.update(Property, id, req.body);
-        if (!title || !address || !price || !bed || !bath || !category || !description) {
+        if (!image||!title || !address || !price || !bed || !bath || !category || !description) {
             return res.status(400).json({error: "Not all fields inputed", update});
         }
 

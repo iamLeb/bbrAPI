@@ -3,10 +3,6 @@ const {Schema} = require("mongoose");
 
 const PropertySchema = new mongoose.Schema(
     {
-        image: {
-            type: String,
-            required: true,
-        },
         price: {
             type: String,
         },
