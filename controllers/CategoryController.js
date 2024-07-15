@@ -24,7 +24,6 @@ const getAll = async (req, res) => {
         let categories = await Service.getAll(Category);
         categories = categories.filter(category => category.active);
 
-        console.log(categories)
         return res.status(200).json(categories);
     } catch (e) {
         return res.status(500).json({error: e.message});
