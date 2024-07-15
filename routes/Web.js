@@ -186,6 +186,7 @@ const propertyRouter = express.Router();
 
 propertyRouter.post("/create", PropertyController.create);
 propertyRouter.get("/", PropertyController.getAll);
+propertyRouter.get("/:id", PropertyController.getOne);
 
 // Use the file router for routes under /property
 router.use("/property", propertyRouter);
