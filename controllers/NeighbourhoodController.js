@@ -28,7 +28,9 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const neighbourhoods = await Service.getAll(Neighbourhood);
+        let neighbourhoods = await Service.getAll(Neighbourhood);
+        neighbourhoods = neighbourhoods.filter(neighbourhood => neighbourhood.active);
+
         return res.status(200).json(neighbourhoods);
     } catch (e) {
         return res.status(500).json({error: e.message});
