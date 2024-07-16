@@ -9,7 +9,6 @@ const create = async (req, res) => {
 
         const exist = await Service.getByField(Category, 'name', name);
         if (exist) {
-            console.log(exist);
             if (!exist.active) {
                 exist.active = true;
                 await exist.save();

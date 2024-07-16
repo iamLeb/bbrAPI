@@ -1,5 +1,6 @@
 const Service = require('../helpers/Services');
 const Neighbourhood = require('../models/Neighbourhood');
+const Category = require("../models/Category");
 
 const create = async (req, res) => {
     try {
@@ -68,24 +69,41 @@ const update = async (req, res) => {
     }
 }
 
-const destroy = async (req, res) => {
+// const destroy = async (req, res) => {
+//     try {
+//         const {id} = req.params;
+//
+//         const findId = await Service.getOne(Neighbourhood, id);
+//         if (!findId) return res.status(404).json({error: 'Neighbourhood not found'});
+//
+//         await Service.destroy(Neighbourhood, id);
+//         return res.status(200).json({message: 'Neighbourhood destroyed'});
+//     } catch (e) {
+//         return res.status(500).json({error: e.message});
+//     }
+// }
+
+const softDelete = async (req, res) => {
     try {
         const {id} = req.params;
 
-        const findId = await Service.getOne(Neighbourhood, id);
-        if (!findId) return res.status(404).json({error: 'Neighbourhood not found'});
+        const category = await Service.getOne(Category, id);
+        if (!category) return res.status(404).json({error: 'Neighbourhood not found'});
 
-        await Service.destroy(Neighbourhood, id);
-        return res.status(200).json({message: 'Neighbourhood destroyed'});
+        category.active = false;
+        await category.save();
+
+        return res.status(200).json({message: 'Neighbourhood deleted'});
     } catch (e) {
         return res.status(500).json({error: e.message});
     }
 }
+
 
 module.exports = {
     create,
     getAll,
     getOne,
     update,
-    destroy
+   softDelete
 }
