@@ -43,9 +43,9 @@ const update = async (req, res) => {
         const findId = await Service.getOne(Blog, id);
         if(!findId) return res.status(404).json({error: 'comment not found'}); 
 
-        const {title, image, content} = req.body;
+        const {title, category, content} = req.body;
         const update = await Service.update(Blog, id, req.body);
-        if(!title || !image || !content) {
+        if(!title || !category || !content) {
             return res.status(400).json({error:"not all fields inputed",update});
         }
         if (!update) return res.status(400).json({error:'There was an error updating the blog'});

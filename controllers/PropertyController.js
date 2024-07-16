@@ -115,7 +115,6 @@ const sort = async (req, res) => {
         const { category, city, neighbourhood } = req.body;
         const query = {};
 
-        console.log(req.body);
         if (category) {
             query.category = category;
         }
