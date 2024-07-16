@@ -7,8 +7,15 @@ const create = async (req, res) => {
         if (!name) return res.status(400).json({error: 'Neighbourhood name is required'});
 
         const exist = await Service.getByField(Neighbourhood, 'name', name);
-        if (exist) return res.status(400).json({error: 'neighbourhood already exists'});
-
+        if (exist) {
+            if (!exist.active) {
+                exist.active = true;
+                await exist.save();
+                return res.status(201).json(exist);
+            } else {
+                return res.status(400).json({error: 'Neighbourhood already exists'});
+            }
+        }
         const neighbourhood = await Service.create(Neighbourhood, req.body);
         if (!neighbourhood) return res.status(400).json({error: 'There was an error creating the neighbourhood'});
 
