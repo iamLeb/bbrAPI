@@ -179,6 +179,9 @@ const mediaRouter = express.Router();
 mediaRouter.post("/create", MediaController.create);
 mediaRouter.get('/getMediaForOwner/:ownerId', MediaController.getMediaForOwner);
 mediaRouter.delete('/:id', MediaController.destroy);
+mediaRouter.get("/", MediaController.getAll);
+mediaRouter.get("/:id", MediaController.getOne);
+mediaRouter.put("/:id", MediaController.update);
 
 // Use the media router for routes under /media
 router.use("/media", mediaRouter);
