@@ -87,11 +87,11 @@ const softDelete = async (req, res) => {
     try {
         const {id} = req.params;
 
-        const category = await Service.getOne(Category, id);
-        if (!category) return res.status(404).json({error: 'Neighbourhood not found'});
+        const neighbourhood = await Service.getOne(Neighbourhood, id);
+        if (!neighbourhood) return res.status(404).json({error: 'Neighbourhood not found'});
 
-        category.active = false;
-        await category.save();
+        neighbourhood.active = false;
+        await neighbourhood.save();
 
         return res.status(200).json({message: 'Neighbourhood deleted'});
     } catch (e) {
