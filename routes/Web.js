@@ -200,6 +200,7 @@ propertyRouter.get("/:id", PropertyController.getOne);
 propertyRouter.put("/:id", PropertyController.update);
 propertyRouter.delete("/:id", PropertyController.destroy);
 
+propertyRouter.post("/search", PropertyController.sort);
 // Use the file router for routes under /property
 router.use("/property", propertyRouter);
 
@@ -213,11 +214,5 @@ availabilityRouter.post("/create", AvailabilityController.create);
 
 // Use the availability router for routes under /availability
 router.use("/availability", CheckAuthentication, availabilityRouter);
-
-module.exports = router;
-
-/**
- * File Routes Ends
- */
 
 module.exports = router;
