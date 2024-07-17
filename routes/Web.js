@@ -210,6 +210,7 @@ router.use("/property", propertyRouter);
 const availabilityRouter = express.Router();
 
 availabilityRouter.post("/create", AvailabilityController.create);
+availabilityRouter.get("/:date",AvailabilityController.getOne);
 
 // Use the availability router for routes under /availability
 router.use("/availability", CheckAuthentication, availabilityRouter);
