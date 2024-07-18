@@ -211,6 +211,7 @@ const availabilityRouter = express.Router();
 
 availabilityRouter.post("/create", AvailabilityController.create);
 availabilityRouter.get("/:date",AvailabilityController.getOne);
+availabilityRouter.get("/month/:year/:month", AvailabilityController.getThreeMonthAvailability);
 
 // Use the availability router for routes under /availability
 router.use("/availability", CheckAuthentication, availabilityRouter);

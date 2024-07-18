@@ -116,7 +116,38 @@ const getOne = async (req, res) => {
   }
 };
 
+const getThreeMonthAvailability = async (req, res) => {
+  try {
+    const { year, month } = req.params;
+
+    // Calculate start date (first day of previous month)
+    const startDate = new Date(Number(year), Number(month) - 2, 1);
+
+    // Calculate end date (last day of next month)
+    const endDate = new Date(Number(year), Number(month) + 1, 0);
+
+    const availabilities = await Availability.find({
+      date: { $gte: startDate, $lte: endDate },
+    });
+
+    const availabilityMap = {};
+
+    availabilities.forEach((av) => {
+      const dateKey = av.date.toISOString().split("T")[0];
+      availabilityMap[dateKey] = {
+        isAvailable: true,
+        startTime: av.startTime.toISOString().split("T")[1].substring(0, 5),
+        endTime: av.endTime.toISOString().split("T")[1].substring(0, 5),
+      };
+    });
+    return res.status(200).json(availabilityMap);
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+
 module.exports = {
   create,
   getOne,
+  getThreeMonthAvailability,
 };
