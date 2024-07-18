@@ -8,7 +8,15 @@ const create = async (req, res) => {
         if (!name) return res.status(400).json({error: 'Category name is required'});
 
         const exist = await Service.getByField(Category, 'name', name);
-        if (exist) return res.status(400).json({error: 'Category already exists'});
+        if (exist) {
+            if (!exist.active) {
+                exist.active = true;
+                await exist.save();
+                return res.status(201).json(exist);
+            } else {
+                return res.status(400).json({error: 'Category already exists'});
+            }
+        }
 
         const category = await Service.create(Category, req.body);
         if (!category) return res.status(400).json({error: 'There was an error creating the category'});

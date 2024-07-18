@@ -66,10 +66,29 @@ const destroy = async (req, res) => {
   }
 };
 
+const update = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const findId = await Service.getOne(Media, id);
+        if (!findId) return res.status(404).json({ error: "Media not found" });
+
+        const updatedMedia = await Service.update(Media, id, req.body);
+        if (!updatedMedia)
+        return res.status(400).json({ error: "There was an error updating the Media" });
+
+        return res.status(200).json(updatedMedia);
+    } catch (error) {
+        return res.status(500).json({ error: error.message });
+    }
+
+}
+
 module.exports = {
   create,
   getMediaForOwner,
   getAll,
   getOne,
-  destroy
+  destroy,
+  update
 }

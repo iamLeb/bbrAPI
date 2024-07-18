@@ -63,6 +63,7 @@ const getOne = async (req, res) => {
     }
 };
 
+
 const update = async (req, res) => {
     try {
         const {id} = req.params;
@@ -109,10 +110,35 @@ const destroy = async (req, res) => {
 };
 
 
+const sort = async (req, res) => {
+    try {
+        const { category, city, neighbourhood } = req.body;
+        const query = {};
+
+        if (category) {
+            query.category = category;
+        }
+        if (city) {
+            query.city = city;
+        }
+        if (neighbourhood) {
+            query.neighbourhood = neighbourhood;
+        }
+
+    
+        const properties = await Property.find(query);
+
+        return res.status(200).json(properties);
+    } catch (e) {
+        return res.status(400).json({ error: e.message });
+    }
+}
+
 module.exports = {
     create,
     getAll,
     getOne,
     update,
-    destroy
+    destroy,
+    sort
 }

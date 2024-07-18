@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.get('/up', (req, res) => {
+app.get('/ping', (req, res) => {
     return res.send('Server running');
 });
 

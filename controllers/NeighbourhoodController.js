@@ -1,5 +1,6 @@
 const Service = require('../helpers/Services');
 const Neighbourhood = require('../models/Neighbourhood');
+const Category = require("../models/Category");
 
 const create = async (req, res) => {
     try {
@@ -7,8 +8,15 @@ const create = async (req, res) => {
         if (!name) return res.status(400).json({error: 'Neighbourhood name is required'});
 
         const exist = await Service.getByField(Neighbourhood, 'name', name);
-        if (exist) return res.status(400).json({error: 'neighbourhood already exists'});
-
+        if (exist) {
+            if (!exist.active) {
+                exist.active = true;
+                await exist.save();
+                return res.status(201).json(exist);
+            } else {
+                return res.status(400).json({error: 'Neighbourhood already exists'});
+            }
+        }
         const neighbourhood = await Service.create(Neighbourhood, req.body);
         if (!neighbourhood) return res.status(400).json({error: 'There was an error creating the neighbourhood'});
 
@@ -20,7 +28,9 @@ const create = async (req, res) => {
 
 const getAll = async (req, res) => {
     try {
-        const neighbourhoods = await Service.getAll(Neighbourhood);
+        let neighbourhoods = await Service.getAll(Neighbourhood);
+        neighbourhoods = neighbourhoods.filter(neighbourhood => neighbourhood.active);
+
         return res.status(200).json(neighbourhoods);
     } catch (e) {
         return res.status(500).json({error: e.message});
@@ -61,24 +71,41 @@ const update = async (req, res) => {
     }
 }
 
-const destroy = async (req, res) => {
+// const destroy = async (req, res) => {
+//     try {
+//         const {id} = req.params;
+//
+//         const findId = await Service.getOne(Neighbourhood, id);
+//         if (!findId) return res.status(404).json({error: 'Neighbourhood not found'});
+//
+//         await Service.destroy(Neighbourhood, id);
+//         return res.status(200).json({message: 'Neighbourhood destroyed'});
+//     } catch (e) {
+//         return res.status(500).json({error: e.message});
+//     }
+// }
+
+const softDelete = async (req, res) => {
     try {
         const {id} = req.params;
 
-        const findId = await Service.getOne(Neighbourhood, id);
-        if (!findId) return res.status(404).json({error: 'Neighbourhood not found'});
+        const neighbourhood = await Service.getOne(Neighbourhood, id);
+        if (!neighbourhood) return res.status(404).json({error: 'Neighbourhood not found'});
 
-        await Service.destroy(Neighbourhood, id);
-        return res.status(200).json({message: 'Neighbourhood destroyed'});
+        neighbourhood.active = false;
+        await neighbourhood.save();
+
+        return res.status(200).json({message: 'Neighbourhood deleted'});
     } catch (e) {
         return res.status(500).json({error: e.message});
     }
 }
+
 
 module.exports = {
     create,
     getAll,
     getOne,
     update,
-    destroy
+   softDelete
 }
