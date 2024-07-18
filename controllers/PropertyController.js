@@ -112,10 +112,9 @@ const destroy = async (req, res) => {
 const getCategory = async (req, res) => {
     try {
         const {category} = req.params;
-        console.log(category)
         let properties;
-        if (category==='') {
-            properties = await Property.find();
+        if (category === 'all') {
+            properties = await Service.getAll(Property)
         } else {
             properties = await Property.find({category});
         }
