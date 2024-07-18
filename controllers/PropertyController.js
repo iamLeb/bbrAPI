@@ -112,7 +112,14 @@ const destroy = async (req, res) => {
 const getCategory = async (req, res) => {
     try {
         const {category} = req.params;
-        const properties = await Property.find(category);
+        console.log(category)
+        let properties;
+        if (category==='') {
+            properties = await Property.find();
+        } else {
+            properties = await Property.find({category});
+        }
+        console.log(properties)
         return res.status(200).json(properties);
     } catch (e) {
         return res.status(500).json({error: e.message});
