@@ -204,6 +204,7 @@ propertyRouter.put("/:id", PropertyController.update);
 propertyRouter.delete("/:id", PropertyController.destroy);
 
 propertyRouter.post("/search", PropertyController.sort);
+propertyRouter.get("/category/:category", PropertyController.getCategory);
 // Use the file router for routes under /property
 router.use("/property", propertyRouter);
 
