@@ -5,7 +5,7 @@ const Service = require("../helpers/Services"); // Adjust the path as needed
 const bookingController = {
   create: async (req, res) => {
     try {
-      const { date, startTime, endTime, duration,contactId } = req.body;
+      let { date, startTime, endTime, duration, contactId } = req.body;
 
       if (!date || !startTime || !endTime || !duration) {
         return res.status(400).json({
@@ -32,21 +32,23 @@ const bookingController = {
           .json({ error: "Booking time is outside of available time" });
       }
 
+      startTime = new Date(startTime).setSeconds(0, 0);
+      endTime = new Date(endTime).setSeconds(0, 0);
+
       const bookingData = {
         startTime,
         endTime,
         duration,
         availability: availability._id,
-        contact:contactId,
-
+        contact: contactId,
       };
 
       const booking = await Service.create(Booking, bookingData);
 
       //Update the availability to include this booking
-        await Service.update(Availability, availability._id, {
-          $push: { bookings: booking._id },
-        });
+      await Service.update(Availability, availability._id, {
+        $push: { bookings: booking._id },
+      });
 
       res.status(201).json(booking);
     } catch (error) {
