@@ -109,10 +109,20 @@ const destroy = async (req, res) => {
     }
 };
 
+const getCategory = async (req, res) => {
+    try {
+        const {category} = req.params;
+        const properties = await Property.find({category});
+        console.log(properties)
+        return res.status(200).json(properties);
+    } catch (e) {
+        return res.status(500).json({error: e.message});
+    }
+};
 
 const sort = async (req, res) => {
     try {
-        const { category, city, neighbourhood } = req.body;
+        const {category, city, neighbourhood} = req.body;
         const query = {};
 
         if (category) {
@@ -125,12 +135,12 @@ const sort = async (req, res) => {
             query.neighbourhood = neighbourhood;
         }
 
-    
+
         const properties = await Property.find(query);
 
         return res.status(200).json(properties);
     } catch (e) {
-        return res.status(400).json({ error: e.message });
+        return res.status(400).json({error: e.message});
     }
 }
 
@@ -140,5 +150,6 @@ module.exports = {
     getOne,
     update,
     destroy,
-    sort
+    sort,
+    getCategory
 }
