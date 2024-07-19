@@ -128,7 +128,7 @@ const getThreeMonthAvailability = async (req, res) => {
 
     const availabilities = await Availability.find({
       date: { $gte: startDate, $lte: endDate },
-    });
+    }).populate('bookings'); // Populate the bookings
 
     const availabilityMap = {};
 
@@ -138,6 +138,12 @@ const getThreeMonthAvailability = async (req, res) => {
         isAvailable: true,
         startTime: av.startTime.toISOString().split("T")[1].substring(0, 5),
         endTime: av.endTime.toISOString().split("T")[1].substring(0, 5),
+        bookings: av.bookings.map(booking => ({
+          startTime: booking.startTime.toISOString(),
+          endTime: booking.endTime.toISOString(),
+          duration: booking.duration
+        }))
+        
       };
     });
     return res.status(200).json(availabilityMap);

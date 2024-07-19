@@ -14,6 +14,12 @@ const AvailabilitySchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    bookings: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Booking",
+      },
+    ],
   },
   { timestamps: true }
 );

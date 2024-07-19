@@ -12,6 +12,7 @@ const FileController = require("../controllers/FileController");
 const PropertyController = require("../controllers/PropertyController");
 const AvailabilityController = require("../controllers/AvailabilityController");
 const MediaController = require("../controllers/MediaController");
+const BookingController=require("../controllers/BookingController")
 const multer = require('multer');
 
 
@@ -213,11 +214,21 @@ router.use("/property", propertyRouter);
 // Create a new router for availability routes
 const availabilityRouter = express.Router();
 
-availabilityRouter.post("/create", AvailabilityController.create);
-availabilityRouter.get("/:date",AvailabilityController.getOne);
+availabilityRouter.post("/create",CheckAuthentication, AvailabilityController.create);
+availabilityRouter.get("/:date",CheckAuthentication,AvailabilityController.getOne);
 availabilityRouter.get("/month/:year/:month", AvailabilityController.getThreeMonthAvailability);
 
 // Use the availability router for routes under /availability
-router.use("/availability", CheckAuthentication, availabilityRouter);
+router.use("/availability",  availabilityRouter);
+
+
+// Create a new router for booking routes
+const bookingRouter = express.Router();
+
+// Add the create route for bookings
+bookingRouter.post("/create", BookingController.create);
+
+// Use the booking router for routes under /booking
+router.use("/booking", bookingRouter);
 
 module.exports = router;
