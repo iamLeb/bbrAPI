@@ -15,7 +15,7 @@ const createToken = (_id, res) => {
     res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // Ensure this is true in production
-        sameSite: 'lax',
+        sameSite: 'none',
         maxAge: 3600000, // Set cookie expiration to 1 hour
     });
 
@@ -127,20 +127,20 @@ const update = async (req, res) => {
     }
 }
 
-const logout = (req, res) => {
-    try {
-        res.clearCookie('token');
-        res.status(200).json('You are logged out');
-    } catch (e) {
-        res.status(400).json({error: e.message});
-    }
-}
+// const logout = (req, res) => {
+//     try {
+//         res.clearCookie('token');
+//         res.status(200).json('You are logged out');
+//     } catch (e) {
+//         res.status(400).json({error: e.message});
+//     }
+// }
 
 module.exports = {
     register,
     login,
     checkAuth,
-    logout,
+    // logout,
     reset,
     update,
     agentregister
