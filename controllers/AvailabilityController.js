@@ -46,7 +46,7 @@ const create = async (req, res) => {
         parsedStartTime < existingAvailability.startTime ||
         parsedEndTime > existingAvailability.endTime
       ) {
-        // Update the existing availability with extended time range
+        // Updates the existing availability with extended time range
         existingAvailability.startTime =
           parsedStartTime < existingAvailability.startTime
             ? parsedStartTime
