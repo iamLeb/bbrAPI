@@ -15,7 +15,7 @@ const createToken = (_id, res) => {
     res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // Ensure this is true in production
-        sameSite: process.env.NODE_ENV === 'development' ? 'none' : 'lax',
+        sameSite: 'lax',
         maxAge: 3600000, // Set cookie expiration to 1 hour
     });
 
