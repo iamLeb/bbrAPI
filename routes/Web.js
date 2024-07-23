@@ -12,7 +12,7 @@ const FileController = require("../controllers/FileController");
 const PropertyController = require("../controllers/PropertyController");
 const AvailabilityController = require("../controllers/AvailabilityController");
 const MediaController = require("../controllers/MediaController");
-const BookingController=require("../controllers/BookingController")
+const BookingController = require("../controllers/BookingController")
 const multer = require('multer');
 
 
@@ -179,6 +179,7 @@ const mediaRouter = express.Router();
 
 mediaRouter.post("/create", MediaController.create);
 mediaRouter.get('/getMediaForOwner/:ownerId', MediaController.getMediaForOwner);
+mediaRouter.get('/getMultipleMedia/:ownerId', MediaController.getMultipleMedia);
 mediaRouter.delete('/:id', MediaController.destroy);
 mediaRouter.get("/", MediaController.getAll);
 mediaRouter.get("/:id", MediaController.getOne);
@@ -215,12 +216,12 @@ router.use("/property", propertyRouter);
 // Create a new router for availability routes
 const availabilityRouter = express.Router();
 
-availabilityRouter.post("/create",CheckAuthentication, AvailabilityController.create);
-availabilityRouter.get("/:date",CheckAuthentication,AvailabilityController.getOne);
+availabilityRouter.post("/create", CheckAuthentication, AvailabilityController.create);
+availabilityRouter.get("/:date", CheckAuthentication, AvailabilityController.getOne);
 availabilityRouter.get("/month/:year/:month", AvailabilityController.getThreeMonthAvailability);
 
 // Use the availability router for routes under /availability
-router.use("/availability",  availabilityRouter);
+router.use("/availability", availabilityRouter);
 
 
 // Create a new router for booking routes
