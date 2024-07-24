@@ -113,7 +113,6 @@ const getCategory = async (req, res) => {
     try {
         const {category} = req.params;
         const properties = await Property.find({category});
-        console.log(properties)
         return res.status(200).json(properties);
     } catch (e) {
         return res.status(500).json({error: e.message});
