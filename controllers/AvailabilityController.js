@@ -128,7 +128,7 @@ const getThreeMonthAvailability = async (req, res) => {
 
     const availabilities = await Availability.find({
       date: { $gte: startDate, $lte: endDate },
-    }).populate('bookings'); // Populate the bookings
+    }).populate("bookings"); // Populate the bookings
 
     const availabilityMap = {};
 
@@ -138,15 +138,37 @@ const getThreeMonthAvailability = async (req, res) => {
         isAvailable: true,
         startTime: av.startTime.toISOString().split("T")[1].substring(0, 5),
         endTime: av.endTime.toISOString().split("T")[1].substring(0, 5),
-        bookings: av.bookings.map(booking => ({
+        bookings: av.bookings.map((booking) => ({
           startTime: booking.startTime.toISOString(),
           endTime: booking.endTime.toISOString(),
-          duration: booking.duration
-        }))
-        
+          duration: booking.duration,
+        })),
       };
     });
     return res.status(200).json(availabilityMap);
+  } catch (e) {
+    return res.status(500).json({ error: e.message });
+  }
+};
+
+const getAll = async (req, res) => {
+  try {
+    const availabilities = await Availability.find({})
+      .sort({ date: 1 })
+      .populate({
+        path: "bookings",
+        options: { sort: { startTime: 1 } },
+        populate: {
+          path: "contact",
+        },
+      })
+      .lean();
+
+    if (!availabilities || availabilities.length === 0) {
+      return res.status(404).json({ message: "No availabilities found" });
+    }
+
+    return res.status(200).json(availabilities);
   } catch (e) {
     return res.status(500).json({ error: e.message });
   }
@@ -156,4 +178,5 @@ module.exports = {
   create,
   getOne,
   getThreeMonthAvailability,
+  getAll,
 };

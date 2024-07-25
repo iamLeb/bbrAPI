@@ -64,7 +64,7 @@ router.use("/blog", blogRouter);
 // Create a new router for Contact routes
 const contactRouter = express.Router();
 
-contactRouter.post("/create", CheckAuthentication, ContactController.create);
+contactRouter.post("/create", ContactController.create);
 contactRouter.get("/", ContactController.getAll);
 contactRouter.get("/:id", ContactController.getOne);
 contactRouter.delete("/:id", CheckAuthentication, ContactController.destroy);
@@ -215,9 +215,10 @@ router.use("/property", propertyRouter);
 // Create a new router for availability routes
 const availabilityRouter = express.Router();
 
-availabilityRouter.post("/create",CheckAuthentication, AvailabilityController.create);
-availabilityRouter.get("/:date",CheckAuthentication,AvailabilityController.getOne);
+availabilityRouter.post("/create", AvailabilityController.create);
+availabilityRouter.get("/getall",AvailabilityController.getAll)
 availabilityRouter.get("/month/:year/:month", AvailabilityController.getThreeMonthAvailability);
+availabilityRouter.get("/:date",CheckAuthentication,AvailabilityController.getOne);
 
 // Use the availability router for routes under /availability
 router.use("/availability",  availabilityRouter);
