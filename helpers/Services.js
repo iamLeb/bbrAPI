@@ -27,16 +27,24 @@ const getOne = async (model, id) => {
 
 const getByField = async (model, field, value) => {
     try {
-        return await model.findOne({ [field]: value });
+        return await model.findOne({[field]: value});
     } catch (e) {
         throw new Error(`Error fetching document by field: ${e.message}`);
     }
 }
 
+const findAll = async (Model, field, value) => {
+    try {
+        return await Model.find({[field]: value});
+    } catch (e) {
+        throw new Error(`Error fetching document by field: ${e.message}`);
+    }
+};
+
 const update = async (model, id, data) => {
     try {
         checkId(id);
-        return await model.findByIdAndUpdate(id, data, { new: true });
+        return await model.findByIdAndUpdate(id, data, {new: true});
     } catch (e) {
         throw new Error(`Error updating document: ${e.message}`);
     }
@@ -68,5 +76,6 @@ module.exports = {
     getByField,
     update,
     destroy,
-    checkId
+    checkId,
+    findAll,
 }
