@@ -10,7 +10,7 @@ const port = process.env.PORT || 3000;
 
 // CORS configuration
 const corsOptions = {
-  origin: process.env.VITE_CORS, // Allow only this origin
+  origin: process.env.VITE_CORS || '*', // Allow only this origin
   optionsSuccessStatus: 204,
   methods: "GET,PUT,CREATE,DELETE,PATCH,HEAD,POST", // Allow only these methods
   credentials: true // set to true

@@ -2,25 +2,25 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Service = require('../helpers/Services');
-const {findOneAndUpdate} = require('../models/Blog');
-const CheckAuthentication = require('../middlewares/CheckAuthentication');
 const validator = require('validator');
 
 
 const createToken = (_id, res) => {
     // creating the token
-    const token = jwt.sign({_id}, process.env.SECRET, {expiresIn: '30d'});
+    const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: '30d' });
 
+    console.log(token);
     // send the token to client cookie
     res.cookie('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Ensure this is true in production
-        sameSite: 'none',
-        maxAge: 3600000, // Set cookie expiration to 1 hour
+        secure: false, // Ensure this is true in production
+        sameSite: 'None',
+        expires: new Date(Date.now() + 8 * 3600000), // 8 hours
+        path: '/'
     });
 
     return true;
-}
+};
 
 const register = async (req, res) => {
     try {
@@ -56,7 +56,8 @@ const login = async (req, res) => {
         const user = await User.login(email, password);
 
         // create token
-        const token = createToken(user._id, res);
+        const token = await createToken(user._id, res);
+
         if (token) {
             return res.status(200).json(user);
         }
