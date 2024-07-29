@@ -34,7 +34,7 @@ const uploadStrategyMultiple = multer({
 // Create a new router for category routes
 const categoryRouter = express.Router();
 
-categoryRouter.post("/create", CheckAuthentication, CategoryController.create);
+categoryRouter.post("/create", CategoryController.create);
 categoryRouter.get("/", CategoryController.getAll);
 categoryRouter.get("/:id", CategoryController.getOne);
 categoryRouter.put("/:id", CheckAuthentication, CategoryController.update);
@@ -46,7 +46,7 @@ router.use("/category", categoryRouter);
 // Create a new router for blog routes
 const blogRouter = express.Router();
 
-blogRouter.post("/create", CheckAuthentication, BlogController.create);
+blogRouter.post("/create", BlogController.create);
 blogRouter.get("/", BlogController.getAll);
 blogRouter.get("/:id", BlogController.getOne);
 blogRouter.put("/:id", CheckAuthentication, BlogController.update);
@@ -64,7 +64,7 @@ router.use("/blog", blogRouter);
 // Create a new router for Contact routes
 const contactRouter = express.Router();
 
-contactRouter.post("/create", CheckAuthentication, ContactController.create);
+contactRouter.post("/create", ContactController.create);
 contactRouter.get("/", ContactController.getAll);
 contactRouter.get("/:id", ContactController.getOne);
 contactRouter.delete("/:id", CheckAuthentication, ContactController.destroy);
@@ -82,7 +82,7 @@ router.use("/contact", contactRouter);
 // Create a new router for Gallery routes
 const galleryRouter = express.Router();
 
-galleryRouter.post("/create", CheckAuthentication, GalleryController.create);
+galleryRouter.post("/create", GalleryController.create);
 galleryRouter.get("/", GalleryController.getAll);
 galleryRouter.get("/:id", GalleryController.getOne);
 galleryRouter.put("/:id", CheckAuthentication, GalleryController.update);
@@ -101,7 +101,7 @@ router.use("/gallery", galleryRouter);
 // Create a new router for Testimonial routes
 const testimonial = express.Router();
 
-testimonial.post("/create", CheckAuthentication, TestimonialController.create);
+testimonial.post("/create", TestimonialController.create);
 testimonial.get("/", TestimonialController.getAll);
 testimonial.get("/:id", TestimonialController.getOne);
 testimonial.put("/:id", CheckAuthentication, TestimonialController.update);
@@ -120,7 +120,7 @@ router.use("/testimonial", testimonial);
 // Create a new router for province routes
 const neighbourhoodRouter = express.Router();
 
-neighbourhoodRouter.post("/create", CheckAuthentication, NeighbourhoodController.create);
+neighbourhoodRouter.post("/create", NeighbourhoodController.create);
 neighbourhoodRouter.get("/", NeighbourhoodController.getAll);
 neighbourhoodRouter.get("/:id", NeighbourhoodController.getOne);
 neighbourhoodRouter.put("/:id", CheckAuthentication, NeighbourhoodController.update);
@@ -138,7 +138,7 @@ router.use("/neighbourhood", neighbourhoodRouter);
  */
 const commentRouter = express.Router();
 
-commentRouter.post("/create", CheckAuthentication, CommentController.create);
+commentRouter.post("/create", CommentController.create);
 commentRouter.get("/", CommentController.getAll);
 commentRouter.get("/:id", CommentController.getOne);
 commentRouter.put("/:id", CheckAuthentication, CommentController.update);
@@ -216,7 +216,7 @@ router.use("/property", propertyRouter);
 // Create a new router for availability routes
 const availabilityRouter = express.Router();
 
-availabilityRouter.post("/create", CheckAuthentication, AvailabilityController.create);
+availabilityRouter.post("/create", AvailabilityController.create);
 availabilityRouter.get("/:date", CheckAuthentication, AvailabilityController.getOne);
 availabilityRouter.get("/month/:year/:month", AvailabilityController.getThreeMonthAvailability);
 
