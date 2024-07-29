@@ -2,8 +2,6 @@ const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Service = require('../helpers/Services');
-const {findOneAndUpdate} = require('../models/Blog');
-const CheckAuthentication = require('../middlewares/CheckAuthentication');
 const validator = require('validator');
 
 
@@ -15,8 +13,10 @@ const createToken = (_id, res) => {
     res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // Ensure this is true in production
-        sameSite: 'none',
-        maxAge: 30 * 24 * 60 * 60 * 1000, // Set cookie expiration to 30 days
+        sameSite: 'None',
+        expires: new Date(Date.now() + 8 * 3600000), // 8 hours
+        domain: 'bbr-client.netlify.app', // adjust as needed
+        path: '/'
     });
 
     return true;
