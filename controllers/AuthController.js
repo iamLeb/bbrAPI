@@ -13,7 +13,7 @@ const createToken = (_id, res) => {
     // send the token to client cookie
     res.cookie('token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Ensure this is true in production
+        secure: false, // Ensure this is true in production
         sameSite: 'None',
         expires: new Date(Date.now() + 8 * 3600000), // 8 hours
         path: '/'
