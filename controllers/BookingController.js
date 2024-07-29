@@ -35,6 +35,11 @@ const bookingController = {
       startTime = new Date(startTime).setSeconds(0, 0);
       endTime = new Date(endTime).setSeconds(0, 0);
 
+      // Add 15 minutes to the endTime
+      endTime = new Date(endTime).setMinutes(
+        new Date(endTime).getMinutes() + 15
+      );
+
       const bookingData = {
         startTime,
         endTime,
@@ -56,6 +61,22 @@ const bookingController = {
     }
   },
 
+  update: async (req, res) => {
+    try {
+      const updatedBooking = await Service.update(
+        Booking,
+        req.params.id,
+        req.body
+      );
+      if (!updatedBooking) {
+        return res.status(404).json({ error: "Booking not found" });
+      }
+      res.status(200).json(updatedBooking);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+
   getAll: async (req, res) => {
     try {
       const bookings = await Service.getAll(Booking);
@@ -72,22 +93,6 @@ const bookingController = {
         return res.status(404).json({ error: "Booking not found" });
       }
       res.status(200).json(booking);
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  },
-
-  update: async (req, res) => {
-    try {
-      const updatedBooking = await Service.update(
-        Booking,
-        req.params.id,
-        req.body
-      );
-      if (!updatedBooking) {
-        return res.status(404).json({ error: "Booking not found" });
-      }
-      res.status(200).json(updatedBooking);
     } catch (error) {
       res.status(500).json({ error: error.message });
     }

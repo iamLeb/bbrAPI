@@ -1,6 +1,155 @@
 const Service = require("../helpers/Services");
 const Availability = require("../models/Availability");
 
+const update = async (req, res) => {
+  try {
+    console.log("Inside Update!!!");
+
+    const { date, startTime, endTime, oldDate } = req.body;
+
+    if (!date || !startTime || !endTime || !oldDate) {
+      console.log(
+        "All fields (date, startTime, endTime, oldDate) are required"
+      );
+      return res.status(400).json({
+        message: "All fields (date, startTime, endTime, oldDate) are required",
+      });
+    }
+
+    // Parse the date strings into Date objects
+    const parsedDate = new Date(date);
+    const parsedStartTime = new Date(startTime);
+    const parsedEndTime = new Date(endTime);
+    const parsedOldDate = new Date(oldDate);
+
+    // Validate parsed dates
+    if (
+      isNaN(parsedDate.getTime()) ||
+      isNaN(parsedStartTime.getTime()) ||
+      isNaN(parsedEndTime.getTime()) ||
+      isNaN(parsedOldDate.getTime())
+    ) {
+      return res.status(400).json({ message: "Invalid date or time format" });
+    }
+
+    // Check if startTime is less than endTime
+    if (parsedStartTime >= parsedEndTime) {
+      return res
+        .status(400)
+        .json({ message: "Start time must be before end time" });
+    }
+
+    if (
+      parsedStartTime.getMinutes() % 15 !== 0 ||
+      parsedEndTime.getMinutes() % 15 !== 0
+    ) {
+      return res
+        .status(400)
+        .json({
+          message: "Start time and end time must be multiples of 15 minutes.",
+        });
+    }
+
+    // This check is done only if there is a change in date
+    if (parsedDate.getTime() !== parsedOldDate.getTime()) {
+      console.log("I am inside the condition where I should not be");
+      // Check if there is existing availability for the new date
+      const existingAvailabilityForNewDate = await Availability.findOne({
+        date: parsedDate,
+      });
+
+      if (existingAvailabilityForNewDate) {
+        return res.status(400).json({
+          message: "Availability for the changing date already exists.",
+        });
+      }
+    }
+
+    // Find existing availability for the old date
+    const existingAvailabilityForOldDate = await Availability.findOne({
+      date: parsedOldDate,
+    });
+
+    // Check if the old availability has bookings
+    if (
+      existingAvailabilityForOldDate &&
+      existingAvailabilityForOldDate.bookings &&
+      existingAvailabilityForOldDate.bookings.length > 0
+    ) {
+      const availability = await Availability.findOne({ date: parsedOldDate })
+        .populate({
+          path: "bookings",
+          options: { sort: { startTime: 1 } },
+        })
+        .lean();
+
+     
+
+      const bookings = availability.bookings;
+
+      // Find the earliest booking start time and the latest booking end time
+      const earliestBookingStartTime = Math.min(
+        ...bookings.map((booking) => new Date(booking.startTime).getTime())
+      );
+      const latestBookingEndTime = Math.max(
+        ...bookings.map((booking) => new Date(booking.endTime).getTime())
+      );
+
+      console.log(earliestBookingStartTime);
+      console.log(latestBookingEndTime);
+
+      // Check if parsedStartTime and parsedEndTime encompass all the bookings
+      const encompassesAllBookings =
+        parsedStartTime.getTime() <= earliestBookingStartTime &&
+        parsedEndTime.getTime() >= latestBookingEndTime;
+
+      if (!encompassesAllBookings) {
+        // Handle the case where the new time range does not encompass all bookings
+        console.log("The new time range does not encompass all bookings.");
+      } else {
+        // Handle the case where the new time range encompasses all bookings
+        console.log("The new time range encompasses all bookings.");
+      }
+
+      if (!encompassesAllBookings) {
+        return res.status(400).json({
+          message:
+            " The new time range for availability does not encompass all existing bookings.",
+        });
+      }
+
+      // Update the existing availability
+      existingAvailabilityForOldDate.date = parsedDate;
+      existingAvailabilityForOldDate.startTime = parsedStartTime;
+      existingAvailabilityForOldDate.endTime = parsedEndTime;
+      await existingAvailabilityForOldDate.save();
+
+      return res.status(200).json({
+        message: "Availability updated successfully",
+        availability: existingAvailabilityForOldDate,
+      });
+    }
+
+    // Update the existing availability
+    existingAvailabilityForOldDate.date = parsedDate;
+    existingAvailabilityForOldDate.startTime = parsedStartTime;
+    existingAvailabilityForOldDate.endTime = parsedEndTime;
+    await existingAvailabilityForOldDate.save();
+
+    res
+      .status(200)
+      .json({
+        message: "Availability updated successfully",
+        existingAvailabilityForOldDate,
+      });
+  } catch (error) {
+    console.error("Error updating availability:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while updating availability" });
+  }
+};
+
 const create = async (req, res) => {
   try {
     const { date, startTime, endTime } = req.body;
@@ -23,6 +172,23 @@ const create = async (req, res) => {
       isNaN(parsedEndTime.getTime())
     ) {
       return res.status(400).json({ error: "Invalid date or time format" });
+    }
+
+    // Check if parsedStartTime is less than parsedEndTime
+    if (parsedStartTime >= parsedEndTime) {
+      return res
+        .status(400)
+        .json({ error: "Start time must be before end time" });
+    }
+
+    // Calculate the difference in minutes
+    const timeDifference = (parsedEndTime - parsedStartTime) / (1000 * 60);
+
+    // Check if the difference is a multiple of 15 minutes
+    if (timeDifference % 15 !== 0) {
+      return res
+        .status(400)
+        .json({ error: "Time difference must be a multiple of 15 minutes" });
     }
 
     // Find existing availability for the same date
@@ -179,4 +345,5 @@ module.exports = {
   getOne,
   getThreeMonthAvailability,
   getAll,
+  update,
 };
