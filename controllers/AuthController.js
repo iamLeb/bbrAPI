@@ -9,18 +9,18 @@ const validator = require('validator');
 
 const createToken = (_id, res) => {
     // creating the token
-    const token = jwt.sign({_id}, process.env.SECRET, {expiresIn: '30d'});
+    const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: '30d' });
 
     // send the token to client cookie
     res.cookie('token', token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // Ensure this is true in production
-        sameSite: 'lax',
-        maxAge: 3600000, // Set cookie expiration to 1 hour
+        sameSite: 'none',
+        maxAge: 30 * 24 * 60 * 60 * 1000, // Set cookie expiration to 30 days
     });
 
     return true;
-}
+};
 
 const register = async (req, res) => {
     try {
