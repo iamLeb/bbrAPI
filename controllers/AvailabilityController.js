@@ -1,5 +1,6 @@
 const Service = require("../helpers/Services");
 const Availability = require("../models/Availability");
+const Booking = require("../models/Booking");
 
 const update = async (req, res) => {
   try {
@@ -43,11 +44,9 @@ const update = async (req, res) => {
       parsedStartTime.getMinutes() % 15 !== 0 ||
       parsedEndTime.getMinutes() % 15 !== 0
     ) {
-      return res
-        .status(400)
-        .json({
-          message: "Start time and end time must be multiples of 15 minutes.",
-        });
+      return res.status(400).json({
+        message: "Start time and end time must be multiples of 15 minutes.",
+      });
     }
 
     // This check is done only if there is a change in date
@@ -82,8 +81,6 @@ const update = async (req, res) => {
           options: { sort: { startTime: 1 } },
         })
         .lean();
-
-     
 
       const bookings = availability.bookings;
 
@@ -120,8 +117,53 @@ const update = async (req, res) => {
 
       // Update the existing availability
       existingAvailabilityForOldDate.date = parsedDate;
-      existingAvailabilityForOldDate.startTime = parsedStartTime;
-      existingAvailabilityForOldDate.endTime = parsedEndTime;
+      existingAvailabilityForOldDate.startTime = new Date(
+        parsedDate.getFullYear(),
+        parsedDate.getMonth(),
+        parsedDate.getDate(),
+        parsedStartTime.getHours(),
+        parsedStartTime.getMinutes()
+      );
+
+      existingAvailabilityForOldDate.endTime = new Date(
+        parsedDate.getFullYear(),
+        parsedDate.getMonth(),
+        parsedDate.getDate(),
+        parsedEndTime.getHours(),
+        parsedEndTime.getMinutes()
+      );
+      // Update all bookings' startTime and endTime
+      const bookingUpdatePromises = existingAvailabilityForOldDate.bookings.map(
+        async (bookingId) => {
+          const booking = await Booking.findById(bookingId);
+          if (booking) {
+            const oldStartTime = new Date(booking.startTime);
+            const oldEndTime = new Date(booking.endTime);
+
+            booking.startTime = new Date(
+              parsedDate.getFullYear(),
+              parsedDate.getMonth(),
+              parsedDate.getDate(),
+              oldStartTime.getHours(),
+              oldStartTime.getMinutes()
+            );
+
+            booking.endTime = new Date(
+              parsedDate.getFullYear(),
+              parsedDate.getMonth(),
+              parsedDate.getDate(),
+              oldEndTime.getHours(),
+              oldEndTime.getMinutes()
+            );
+
+            return booking.save();
+          }
+        }
+      );
+
+      // Wait for all booking updates to complete
+      await Promise.all(bookingUpdatePromises);
+
       await existingAvailabilityForOldDate.save();
 
       return res.status(200).json({
@@ -136,12 +178,10 @@ const update = async (req, res) => {
     existingAvailabilityForOldDate.endTime = parsedEndTime;
     await existingAvailabilityForOldDate.save();
 
-    res
-      .status(200)
-      .json({
-        message: "Availability updated successfully",
-        existingAvailabilityForOldDate,
-      });
+    res.status(200).json({
+      message: "Availability updated successfully",
+      existingAvailabilityForOldDate,
+    });
   } catch (error) {
     console.error("Error updating availability:", error);
     res
