@@ -12,22 +12,21 @@ const FileController = require("../controllers/FileController");
 const PropertyController = require("../controllers/PropertyController");
 const AvailabilityController = require("../controllers/AvailabilityController");
 const MediaController = require("../controllers/MediaController");
-const BookingController = require("../controllers/BookingController")
+const BookingController = require("../controllers/BookingController");
 const EmailController = require("../controllers/EmailController");
 
-const multer = require('multer');
-
+const multer = require("multer");
 
 const inMemoryStorage = multer.memoryStorage();
 const uploadStrategy = multer({
-    storage: inMemoryStorage,
-    limits: {fileSize: 100 * 1024 * 1024},
+  storage: inMemoryStorage,
+  limits: { fileSize: 100 * 1024 * 1024 },
 }).single("file");
 
 // for multiple files
 const uploadStrategyMultiple = multer({
-    storage: inMemoryStorage,
-    limits: {fileSize: 100 * 1024 * 1024},
+  storage: inMemoryStorage,
+  limits: { fileSize: 100 * 1024 * 1024 },
 }).array("files", 10);
 
 /**
@@ -40,7 +39,11 @@ categoryRouter.post("/create", CategoryController.create);
 categoryRouter.get("/", CategoryController.getAll);
 categoryRouter.get("/:id", CategoryController.getOne);
 categoryRouter.put("/:id", CheckAuthentication, CategoryController.update);
-categoryRouter.delete("/:id", CheckAuthentication, CategoryController.softDelete);
+categoryRouter.delete(
+  "/:id",
+  CheckAuthentication,
+  CategoryController.softDelete
+);
 
 // Use the category router for routes under /category
 router.use("/category", categoryRouter);
@@ -125,8 +128,16 @@ const neighbourhoodRouter = express.Router();
 neighbourhoodRouter.post("/create", NeighbourhoodController.create);
 neighbourhoodRouter.get("/", NeighbourhoodController.getAll);
 neighbourhoodRouter.get("/:id", NeighbourhoodController.getOne);
-neighbourhoodRouter.put("/:id", CheckAuthentication, NeighbourhoodController.update);
-neighbourhoodRouter.delete("/:id", CheckAuthentication, NeighbourhoodController.softDelete);
+neighbourhoodRouter.put(
+  "/:id",
+  CheckAuthentication,
+  NeighbourhoodController.update
+);
+neighbourhoodRouter.delete(
+  "/:id",
+  CheckAuthentication,
+  NeighbourhoodController.softDelete
+);
 
 // Use the category router for routes under /category
 router.use("/neighbourhood", neighbourhoodRouter);
@@ -161,9 +172,9 @@ const fileRouter = express.Router();
 
 fileRouter.post("/upload", uploadStrategy, FileController.uploadFile);
 fileRouter.post(
-    "/upload-multiple",
-    uploadStrategyMultiple,
-    FileController.uploadMultiple
+  "/upload-multiple",
+  uploadStrategyMultiple,
+  FileController.uploadMultiple
 );
 
 // Use the file router for routes under /file
@@ -180,9 +191,9 @@ router.use("/file", fileRouter);
 const mediaRouter = express.Router();
 
 mediaRouter.post("/create", MediaController.create);
-mediaRouter.get('/getMediaForOwner/:ownerId', MediaController.getMediaForOwner);
-mediaRouter.get('/getMultipleMedia/:ownerId', MediaController.getMultipleMedia);
-mediaRouter.delete('/:id', MediaController.destroy);
+mediaRouter.get("/getMediaForOwner/:ownerId", MediaController.getMediaForOwner);
+mediaRouter.get("/getMultipleMedia/:ownerId", MediaController.getMultipleMedia);
+mediaRouter.delete("/:id", MediaController.destroy);
 mediaRouter.get("/", MediaController.getAll);
 mediaRouter.get("/:id", MediaController.getOne);
 mediaRouter.put("/:id", MediaController.update);
@@ -193,7 +204,6 @@ router.use("/media", mediaRouter);
 /**
  * Media Routes Ends
  */
-
 
 /**
  * Property Routes
@@ -219,16 +229,24 @@ router.use("/property", propertyRouter);
 const availabilityRouter = express.Router();
 
 availabilityRouter.post("/create", AvailabilityController.create);
-availabilityRouter.get("/getall",AvailabilityController.getAll)
+availabilityRouter.get("/getall", AvailabilityController.getAll);
 availabilityRouter.put("/update", AvailabilityController.update);
-availabilityRouter.delete('/delete/:id', AvailabilityController.deleteAvailability);
-availabilityRouter.get("/month/:year/:month", AvailabilityController.getThreeMonthAvailability);
-availabilityRouter.get("/:date",CheckAuthentication,AvailabilityController.getOne);
-
+availabilityRouter.delete(
+  "/delete/:id",
+  AvailabilityController.deleteAvailability
+);
+availabilityRouter.get(
+  "/month/:year/:month",
+  AvailabilityController.getThreeMonthAvailability
+);
+availabilityRouter.get(
+  "/:date",
+  CheckAuthentication,
+  AvailabilityController.getOne
+);
 
 // Use the availability router for routes under /availability
 router.use("/availability", availabilityRouter);
-
 
 // Create a new router for booking routes
 const bookingRouter = express.Router();
@@ -242,10 +260,9 @@ bookingRouter.delete("/delete/:id", BookingController.deleteBooking);
 // Use the booking router for routes under /booking
 router.use("/booking", bookingRouter);
 
-
 // Email Routes
 const emailRouter = express.Router();
-emailRouter.post("/send-confirmation", EmailController.sendConfirmation);
+emailRouter.post("/send", EmailController.sendConfirmation);
 router.use("/email", emailRouter);
 
 module.exports = router;
