@@ -198,24 +198,43 @@ const bookingController = {
       res.status(500).json({ error: error.message });
     }
   },
-
-  delete: async (req, res) => {
+  deleteBooking : async (req, res) => {
     try {
-      const deletedBooking = await Service.destroy(Booking, req.params.id);
-      if (!deletedBooking) {
-        return res.status(404).json({ error: "Booking not found" });
+      const { id } = req.params;
+  
+      // Find the booking
+      const booking = await Booking.findById(id);
+      if (!booking) {
+        return res.status(404).json({ message: "Booking not found" });
       }
-
+  
+      // Find the associated availability
+      const availability = await Availability.findById(booking.availability);
+      if (!availability) {
+        return res.status(404).json({ message: "Associated availability not found" });
+      }
+  
       // Remove the booking reference from the availability
-      await Service.update(Availability, deletedBooking.availability, {
-        $pull: { bookings: deletedBooking._id },
-      });
-
-      res.status(200).json({ message: "Booking deleted successfully" });
+      availability.bookings = availability.bookings.filter(
+        (bookingId) => bookingId.toString() !== id
+      );
+      await availability.save();
+  
+      // Delete the contact if it's not associated with any other bookings
+      if (booking.contact) {
+        await Contact.findByIdAndDelete(booking.contact);
+      }
+  
+      // Delete the booking
+      await Booking.findByIdAndDelete(id);
+  
+      res.status(200).json({ message: "Booking and associated data deleted successfully" });
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      console.error("Error deleting booking:", error);
+      res.status(500).json({ message: "An error occurred while deleting booking" });
     }
   },
+
 };
 
 module.exports = bookingController;

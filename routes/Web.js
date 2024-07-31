@@ -235,6 +235,7 @@ const bookingRouter = express.Router();
 bookingRouter.post("/create", BookingController.create);
 bookingRouter.get("/", BookingController.getAll);
 bookingRouter.put("/update", BookingController.update);
+bookingRouter.delete("/delete/:id", BookingController.deleteBooking);
 
 // Use the booking router for routes under /booking
 router.use("/booking", bookingRouter);
