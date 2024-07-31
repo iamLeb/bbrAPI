@@ -1,5 +1,6 @@
 const Booking = require("../models/Booking"); // Adjust the path as needed
 const Availability = require("../models/Availability"); // Adjust the path as needed
+const Contact = require("../models/Contact");
 const Service = require("../helpers/Services"); // Adjust the path as needed
 
 const bookingController = {
@@ -63,7 +64,16 @@ const bookingController = {
 
   update: async (req, res) => {
     try {
-      const { id,availability, startTime, endTime } = req.body;
+      const {
+        id,
+        availability,
+        startTime,
+        endTime,
+        name,
+        email,
+        phone,
+        message,
+      } = req.body;
 
       // Step 1: Find the existing booking
       const existingBooking = await Booking.findById(id);
@@ -145,9 +155,23 @@ const bookingController = {
         durationInMilliseconds / (1000 * 60)
       );
       console.log("Existing booking:", existingBooking);
-      
+
       // Convert to minutes
       const updatedBooking = await existingBooking.save();
+
+      // Step 6: Update the contact
+      const contact = await Contact.findById(updatedBooking.contact);
+
+      if (contact) {
+        contact.name = name;
+        contact.email = email;
+        contact.phone = phone;
+        contact.message = message;
+        await contact.save();
+      } else {
+        return res.status(404).json({ error: "Contact not found" });
+      }
+
       res.status(200).json(updatedBooking);
     } catch (error) {
       res.status(500).json({ message: error.message });
