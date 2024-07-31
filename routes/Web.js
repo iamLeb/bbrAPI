@@ -219,6 +219,7 @@ const availabilityRouter = express.Router();
 availabilityRouter.post("/create", AvailabilityController.create);
 availabilityRouter.get("/getall",AvailabilityController.getAll)
 availabilityRouter.put("/update", AvailabilityController.update);
+availabilityRouter.delete('/delete/:id', AvailabilityController.deleteAvailability);
 availabilityRouter.get("/month/:year/:month", AvailabilityController.getThreeMonthAvailability);
 availabilityRouter.get("/:date",CheckAuthentication,AvailabilityController.getOne);
 

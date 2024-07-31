@@ -1,10 +1,58 @@
 const Service = require("../helpers/Services");
 const Availability = require("../models/Availability");
 const Booking = require("../models/Booking");
+const Contact = require("../models/Contact");
+
+const deleteAvailability = async (req, res) => {
+  try {
+    const { id } = req.params; // Assuming the availability ID is passed as a route parameter
+
+    // Find the availability
+    const availability = await Availability.findById(id);
+
+    if (!availability) {
+      return res.status(404).json({ message: "Availability not found" });
+    }
+
+    // Get all booking IDs associated with this availability
+    const bookingIds = availability.bookings;
+
+    // Delete all associated bookings and collect their contact IDs
+    const contactIds = new Set();
+    for (const bookingId of bookingIds) {
+      const booking = await Booking.findById(bookingId);
+      if (booking) {
+        if (booking.contact) {
+          contactIds.add(booking.contact.toString());
+        }
+        await Booking.findByIdAndDelete(bookingId);
+      }
+    }
+
+    // Delete all collected contacts
+    for (const contactId of contactIds) {
+      await Contact.findByIdAndDelete(contactId);
+    }
+
+    // Delete the availability itself
+    await Availability.findByIdAndDelete(id);
+
+    res.status(200).json({
+      message: "Availability and associated booking data with contacts deleted successfully",
+      deletedAvailability: availability,
+      deletedBookingsCount: bookingIds.length,
+      deletedContactsCount: contactIds.size,
+    });
+  } catch (error) {
+    console.error("Error deleting availability:", error);
+    res
+      .status(500)
+      .json({ message: "An error occurred while deleting availability" });
+  }
+};
 
 const update = async (req, res) => {
   try {
-
     const { date, startTime, endTime, oldDate } = req.body;
 
     if (!date || !startTime || !endTime || !oldDate) {
@@ -87,14 +135,10 @@ const update = async (req, res) => {
         ...bookings.map((booking) => new Date(booking.endTime).getTime())
       );
 
-    
-
       // Check if parsedStartTime and parsedEndTime encompass all the bookings
       const encompassesAllBookings =
         parsedStartTime.getTime() <= earliestBookingStartTime &&
         parsedEndTime.getTime() >= latestBookingEndTime;
-
-    
 
       if (!encompassesAllBookings) {
         return res.status(400).json({
@@ -374,4 +418,5 @@ module.exports = {
   getThreeMonthAvailability,
   getAll,
   update,
+  deleteAvailability,
 };
