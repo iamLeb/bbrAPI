@@ -13,6 +13,8 @@ const PropertyController = require("../controllers/PropertyController");
 const AvailabilityController = require("../controllers/AvailabilityController");
 const MediaController = require("../controllers/MediaController");
 const BookingController = require("../controllers/BookingController")
+const EmailController = require("../controllers/EmailController");
+
 const multer = require('multer');
 
 
@@ -239,5 +241,11 @@ bookingRouter.delete("/delete/:id", BookingController.deleteBooking);
 
 // Use the booking router for routes under /booking
 router.use("/booking", bookingRouter);
+
+
+// Email Routes
+const emailRouter = express.Router();
+emailRouter.post("/send-confirmation", EmailController.sendConfirmation);
+router.use("/email", emailRouter);
 
 module.exports = router;
