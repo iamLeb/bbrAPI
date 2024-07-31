@@ -233,6 +233,7 @@ const bookingRouter = express.Router();
 // Add the create route for bookings
 bookingRouter.post("/create", BookingController.create);
 bookingRouter.get("/", BookingController.getAll);
+bookingRouter.put("/update", BookingController.update);
 
 // Use the booking router for routes under /booking
 router.use("/booking", bookingRouter);

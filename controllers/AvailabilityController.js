@@ -4,14 +4,10 @@ const Booking = require("../models/Booking");
 
 const update = async (req, res) => {
   try {
-    console.log("Inside Update!!!");
 
     const { date, startTime, endTime, oldDate } = req.body;
 
     if (!date || !startTime || !endTime || !oldDate) {
-      console.log(
-        "All fields (date, startTime, endTime, oldDate) are required"
-      );
       return res.status(400).json({
         message: "All fields (date, startTime, endTime, oldDate) are required",
       });
@@ -51,7 +47,6 @@ const update = async (req, res) => {
 
     // This check is done only if there is a change in date
     if (parsedDate.getTime() !== parsedOldDate.getTime()) {
-      console.log("I am inside the condition where I should not be");
       // Check if there is existing availability for the new date
       const existingAvailabilityForNewDate = await Availability.findOne({
         date: parsedDate,
@@ -92,21 +87,14 @@ const update = async (req, res) => {
         ...bookings.map((booking) => new Date(booking.endTime).getTime())
       );
 
-      console.log(earliestBookingStartTime);
-      console.log(latestBookingEndTime);
+    
 
       // Check if parsedStartTime and parsedEndTime encompass all the bookings
       const encompassesAllBookings =
         parsedStartTime.getTime() <= earliestBookingStartTime &&
         parsedEndTime.getTime() >= latestBookingEndTime;
 
-      if (!encompassesAllBookings) {
-        // Handle the case where the new time range does not encompass all bookings
-        console.log("The new time range does not encompass all bookings.");
-      } else {
-        // Handle the case where the new time range encompasses all bookings
-        console.log("The new time range encompasses all bookings.");
-      }
+    
 
       if (!encompassesAllBookings) {
         return res.status(400).json({

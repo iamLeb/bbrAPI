@@ -63,17 +63,94 @@ const bookingController = {
 
   update: async (req, res) => {
     try {
-      const updatedBooking = await Service.update(
-        Booking,
-        req.params.id,
-        req.body
-      );
-      if (!updatedBooking) {
-        return res.status(404).json({ error: "Booking not found" });
+      const { id,availability, startTime, endTime } = req.body;
+
+      // Step 1: Find the existing booking
+      const existingBooking = await Booking.findById(id);
+      if (!existingBooking) {
+        return res.status(404).json({ message: "Booking not found" });
       }
+
+      // Step 2: Find the associated availability
+      const associatedAvailability = await Availability.findById(
+        availability
+      ).populate("bookings");
+      if (!associatedAvailability) {
+        return res
+          .status(404)
+          .json({ message: "Associated availability not found" });
+      }
+
+      // New Step: Check if startTime is smaller than endTime
+      if (new Date(startTime) >= new Date(endTime)) {
+        return res
+          .status(400)
+          .json({ message: "Start time must be earlier than end time" });
+      }
+
+      // New Step: Check if startTime and endTime are multiples of 15 minutes
+      const isMultipleOf15Minutes = (date) => {
+        return (
+          date.getMinutes() % 15 === 0 &&
+          date.getSeconds() === 0 &&
+          date.getMilliseconds() === 0
+        );
+      };
+
+      if (
+        !isMultipleOf15Minutes(new Date(startTime)) ||
+        !isMultipleOf15Minutes(new Date(endTime))
+      ) {
+        return res.status(400).json({
+          message: "Start time and end time must be multiples of 15 minutes",
+        });
+      }
+
+      console.log("startTime", startTime, "endTime", endTime);
+      console.log("bokinf timestart", new Date(existingBooking.startTime));
+      console.log("bokinf timeend", new Date(existingBooking.endTime));
+
+      // Step 3: Check if the new booking fits within the availability's time range
+      if (
+        new Date(associatedAvailability.startTime) > new Date(startTime) ||
+        new Date(endTime) > new Date(associatedAvailability.endTime)
+      ) {
+        return res
+          .status(400)
+          .json({ message: "Booking time is outside of availability range" });
+      }
+
+      // Step 4: Check for overlaps with existing bookings
+      const hasOverlap = associatedAvailability.bookings.some((booking) => {
+        if (booking._id.toString() === id) return false; // Skip the current booking
+        const bookingStart = new Date(booking.startTime);
+        const bookingEnd = new Date(booking.endTime);
+        const newStart = new Date(startTime);
+        const newEnd = new Date(endTime);
+        return newStart < bookingEnd && bookingStart < newEnd;
+      });
+
+      if (hasOverlap) {
+        return res.status(400).json({
+          message: "The requested time slot overlaps with an existing booking",
+        });
+      }
+
+      // Step 5: Update the booking
+      existingBooking.startTime = startTime;
+      existingBooking.endTime = endTime;
+      // Calculate and update the duration
+      const durationInMilliseconds = new Date(endTime) - new Date(startTime);
+      existingBooking.duration = Math.round(
+        durationInMilliseconds / (1000 * 60)
+      );
+      console.log("Existing booking:", existingBooking);
+      
+      // Convert to minutes
+      const updatedBooking = await existingBooking.save();
       res.status(200).json(updatedBooking);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({ message: error.message });
     }
   },
 
