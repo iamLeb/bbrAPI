@@ -27,7 +27,12 @@ const EmailController = {
       <p>Dear ${name},</p>
       <p>Your booking with Bukola Bliss Realtor is confirmed. Here are your details:</p>
       <ul>
-        <li>Date: ${new Date(bookingDetails.date).toLocaleDateString()}</li>
+       <li>Date: ${new Date(bookingDetails.date).toLocaleString("en-US", {
+         weekday: "long",
+         day: "numeric",
+         month: "long",
+         year: "numeric",
+       })}</li>
         <li>Start Time: ${new Date(
           bookingDetails.startTime
         ).toLocaleTimeString()}</li>
@@ -51,7 +56,7 @@ const EmailController = {
         name: "Bukola Bliss Realtor",
       })
       .setReplyTo({
-        email: "aikismat591@gmail.com",
+        email: "babian14@yahoo.co.uk",
         name: "Bukola Bliss Realtor",
       })
       .setTo(recipients)
