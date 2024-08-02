@@ -9,11 +9,10 @@ const createToken = (_id, res) => {
     // creating the token
     const token = jwt.sign({ _id }, process.env.SECRET, { expiresIn: '30d' });
 
-    console.log(token);
     // send the token to client cookie
     res.cookie('token', token, {
         httpOnly: true,
-        secure: false, // Ensure this is true in production
+        secure: process.env.NODE_ENV === 'production', // Ensure this is true in production
         sameSite: 'None',
         expires: new Date(Date.now() + 8 * 3600000), // 8 hours
         path: '/'
